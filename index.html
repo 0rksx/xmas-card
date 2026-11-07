@@ -15,8 +15,8 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      /* 보내주신 붉은 종이 배경 적용 */
-      background: url('paper_red.jpg') repeat center center;
+      /* 1. 전체 배경: 보내주신 크리스마스 트리 이미지 */
+      background: url('tree_bg.jpg') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -32,14 +32,16 @@
       box-sizing: border-box;
     }
 
+    /* 2. 편지 봉투 바깥쪽 감싸는 노란색 체크 영역: 붉은 종이 배경 적용 */
     .envelope-container {
       position: relative;
       width: 100%;
       height: 480px;
       overflow: hidden;
       border-radius: 20px;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.35);
-      background-color: #3b060d;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+      background: url('paper_red.jpg') repeat center center;
+      background-size: cover;
     }
 
     .bg-closed {
@@ -68,13 +70,13 @@
       z-index: 1;
     }
 
-    /* 편지지 - 보내주신 상아색 종이 텍스처 배경 적용 */
+    /* 3. 상아색 편지지: 둥근 모서리 제거하고 원래 직각 엣지(border-radius: 0) 적용 */
     .letter {
       position: absolute;
       top: 25px; left: 5%; width: 90%; height: 430px;
       background: url('paper_ivory.jpg') repeat center center;
       background-size: cover;
-      border-radius: 12px;
+      border-radius: 0; /* 직각 엣지 유지 */
       padding: 24px 32px 12px 32px;
       box-sizing: border-box;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
@@ -95,16 +97,16 @@
     .form-col { flex: 1; display: flex; flex-direction: column; }
     .form-group { margin-bottom: 10px; }
     
-    /* To. 와 From. 폰트만 세리프(명조) 스타일로 변경 */
+    /* 5. To. 와 From. 폰트: 이탈릭체(Italic) 적용 */
     .to-label {
       font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
       font-size: 22px;
       font-weight: bold;
       color: var(--burgundy);
       margin-right: 6px;
     }
     
-    /* 이름 적는 칸은 고딕 폰트 유지 */
     input.input-to, input.input-from {
       border: none;
       border-bottom: 1px solid #aaa;
@@ -122,7 +124,7 @@
       height: 210px;
       border: 1px solid #d4ceb8;
       background-color: rgba(255, 255, 255, 0.6);
-      border-radius: 8px;
+      border-radius: 4px;
       padding: 12px;
       box-sizing: border-box;
       font-size: 13.5px;
@@ -142,7 +144,7 @@
       padding: 11px;
       border: 1px solid #d4ceb8;
       background-color: rgba(255, 255, 255, 0.6);
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 13px;
       box-sizing: border-box;
       outline: none;
@@ -154,12 +156,12 @@
       padding: 11px;
       border: 1px solid #d4ceb8;
       background-color: rgba(255, 255, 255, 0.7);
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 12px;
       margin-bottom: 16px;
     }
     
-    /* 봉인 버튼: 배경 삭제, 검정색 얇은 고딕 폰트, 2pt 작은 12px 크기 */
+    /* 4. 봉인 버튼: 배경 없이 얇은 고딕 12px 유지 */
     button.btn-submit {
       width: 100%;
       padding: 10px 4px;
@@ -221,7 +223,7 @@
       box-sizing: border-box;
       overflow-y: auto;
     }
-    .lock-box { background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 12px; border: 1px solid #e0d8cc; margin-top: 15px; }
+    .lock-box { background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 8px; border: 1px solid #e0d8cc; margin-top: 15px; }
     .store-info { margin-top: 8px; font-size: 11px; color: #666; background: rgba(255, 255, 255, 0.8); padding: 8px; border-radius: 6px; border: 1px solid #eee; text-align: left; }
     .maps-btn { display: inline-block; margin-top: 4px; color: var(--burgundy); font-weight: bold; text-decoration: none; }
     .from-signature {
@@ -238,7 +240,7 @@
       padding: 10px 12px;
       background: rgba(255, 255, 255, 0.85);
       border: 2px dashed var(--gold-accent);
-      border-radius: 10px;
+      border-radius: 8px;
       text-align: center;
     }
     .ticket-title {
@@ -314,7 +316,8 @@
               </select>
             </div>
           </div>
-          <button class="btn-submit" onclick="openPreview()">メッセージカードを封印して贈る</button>
+          <!-- 4. 🎄 이모지가 앞뒤로 추가된 봉인 버튼 -->
+          <button class="btn-submit" onclick="openPreview()">🎄 メッセージカードを封印して贈る 🎄</button>
         </div>
       </div>
 
@@ -347,7 +350,7 @@
     <!-- 4. 받는 사람 전용 수신 화면 -->
     <div class="letter" id="receiverLetter" style="display:none;">
       <div class="receive-view">
-        <h3 style="color:var(--burgundy); margin:4px 0 10px 0; font-family:Georgia, serif;">To. <span id="recTo" style="font-family:sans-serif;"></span></h3>
+        <h3 style="color:var(--burgundy); margin:4px 0 10px 0; font-family:Georgia, serif; font-style:italic;">To. <span id="recTo" style="font-family:sans-serif; font-style:normal;"></span></h3>
 
         <div id="lockSection" class="lock-box">
           <p style="font-size:13px; color:#555; margin-bottom:12px;">12月24日開封用 暗証番号を入力してください</p>
@@ -358,7 +361,7 @@
 
         <div id="contentSection" style="display:none; text-align:left; flex:1; flex-direction:column; justify-content:space-between;">
           <div>
-            <div style="background:rgba(255,255,255,0.7); padding:12px 14px; border-radius:8px; border:1px solid #e0d8cc; font-size:13px; line-height:1.5; white-space:pre-wrap;" id="recMsg"></div>
+            <div style="background:rgba(255,255,255,0.7); padding:12px 14px; border-radius:4px; border:1px solid #e0d8cc; font-size:13px; line-height:1.5; white-space:pre-wrap;" id="recMsg"></div>
             
             <div class="ticket-card" id="recGiftTitle" style="display:none;">
               <div class="ticket-title" id="recGiftName">🎟️ カヌレ1個 交換チケット</div>
@@ -375,7 +378,7 @@
             <a href="https://maps.google.com/?q=KURAMAE+CANNELE" target="_blank" class="maps-btn">📍 Google Mapsで場所を確認する</a>
           </div>
 
-          <div class="from-signature"><span style="font-family:Georgia, serif;">From.</span> <span id="recFrom" style="font-family:sans-serif;"></span></div>
+          <div class="from-signature"><span style="font-family:Georgia, serif; font-style:italic;">From.</span> <span id="recFrom" style="font-family:sans-serif; font-style:normal;"></span></div>
 
           <img src="logo.png" alt="KURAMAE CANNELÉ" class="brand-logo-bottom" onerror="this.style.display='none'">
         </div>
