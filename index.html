@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Merry Christmas - KURAMAE CANNELÉ</title>
   <style>
     :root {
@@ -34,7 +34,7 @@
     .envelope-container {
       position: relative;
       width: 100%;
-      height: 480px;
+      height: 520px;
       overflow: hidden;
       border-radius: 20px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.5);
@@ -70,24 +70,25 @@
 
     .letter {
       position: absolute;
-      top: 25px; left: 5%; width: 90%; height: 430px;
+      top: 25px; left: 5%; width: 90%; height: 470px;
       background: url('paper_ivory.jpg') repeat center center;
       background-size: cover;
       border-radius: 0;
-      padding: 24px 32px 12px 32px;
+      padding: 20px 28px 12px 28px;
       box-sizing: border-box;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      transform: translateY(320px);
+      transform: translateY(380px);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 2;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow-y: auto;
     }
 
     .envelope-container.open .bg-closed { opacity: 0; pointer-events: none; }
     .envelope-container.open .letter { transform: translateY(0); }
-    .envelope-container.sealed .letter { transform: translateY(340px) !important; transition: transform 1s ease-in-out !important; }
+    .envelope-container.sealed .letter { transform: translateY(380px) !important; transition: transform 1s ease-in-out !important; }
     .envelope-container.sealed .bg-final { top: 0 !important; }
 
     .form-row { display: flex; gap: 24px; }
@@ -108,6 +109,8 @@
       border-bottom: 1px solid #aaa;
       background: transparent;
       font-size: 15px;
+      color: #222222;
+      font-weight: 500;
       padding: 4px;
       outline: none;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
@@ -117,13 +120,14 @@
     
     textarea.input-msg {
       width: 100%;
-      height: 210px;
+      height: 180px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.6);
+      background-color: rgba(255, 255, 255, 0.65);
       border-radius: 4px;
       padding: 12px;
       box-sizing: border-box;
       font-size: 13.5px;
+      color: #222222;
       line-height: 1.6;
       resize: none;
       outline: none;
@@ -139,9 +143,10 @@
       width: 100%;
       padding: 11px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.6);
+      background-color: rgba(255, 255, 255, 0.65);
       border-radius: 4px;
       font-size: 13px;
+      color: #222222;
       box-sizing: border-box;
       outline: none;
       margin-bottom: 12px;
@@ -151,9 +156,10 @@
       width: 100%;
       padding: 11px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.7);
+      background-color: rgba(255, 255, 255, 0.75);
       border-radius: 4px;
       font-size: 12px;
+      color: #222222;
       margin-bottom: 16px;
     }
     
@@ -179,11 +185,10 @@
     .brand-logo-bottom {
       max-width: 60px;
       height: auto;
-      margin: 0 auto 4px auto;
+      margin: 4px auto 4px auto;
       display: block;
     }
 
-    /* 프리뷰 팝업 */
     .preview-modal {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
@@ -191,12 +196,11 @@
     }
     .preview-modal.show { opacity: 1; pointer-events: auto; }
     .preview-content { background: #fff; width: 90%; max-width: 400px; border-radius: 16px; padding: 24px; text-align: center; }
-    .preview-card { background: #faf7f2; border: 1px solid #e0d8cc; border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 20px; font-size: 13px; }
+    .preview-card { background: #faf7f2; border: 1px solid #e0d8cc; border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 20px; font-size: 13px; color: #222; }
     .preview-btn-group { display: flex; gap: 10px; }
     .btn-edit { flex: 1; padding: 12px; border: 1px solid #ccc; background: #fff; border-radius: 8px; cursor: pointer; }
     .btn-confirm { flex: 1; padding: 12px; border: none; background: var(--burgundy); color: #fff; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-    /* 완료 오버레이 레이어 */
     .result-overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(40, 5, 10, 0.35);
@@ -208,7 +212,6 @@
     .result-overlay .date-notice { font-size: 13px; color: #e2d4c0; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.7); margin-bottom: 8px; }
     .btn-share { background-color: #06c755; color: white; border: none; padding: 13px 28px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); margin-top: auto; }
 
-    /* 수신자 전용 카드 디자인 */
     .receive-view {
       padding: 16px 20px;
       text-align: center;
@@ -218,22 +221,24 @@
       box-sizing: border-box;
       overflow-y: auto;
     }
-    .lock-box { background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 8px; border: 1px solid #e0d8cc; margin-top: 15px; }
-    .store-info { margin-top: 8px; font-size: 11px; color: #666; background: rgba(255, 255, 255, 0.8); padding: 8px; border-radius: 6px; border: 1px solid #eee; text-align: left; }
+    .lock-box { background: rgba(255, 255, 255, 0.85); padding: 20px; border-radius: 8px; border: 1px solid #e0d8cc; margin-top: 15px; }
+    .store-info { margin-top: 8px; font-size: 11px; color: #555; background: rgba(255, 255, 255, 0.85); padding: 8px; border-radius: 6px; border: 1px solid #eee; text-align: left; }
     .maps-btn { display: inline-block; margin-top: 4px; color: var(--burgundy); font-weight: bold; text-decoration: none; }
+    
+    .name-text {
+      color: #222222 !important;
+    }
+
     .from-signature {
       text-align: right;
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
       font-size: 15px;
-      font-weight: bold;
-      color: var(--burgundy);
       margin-top: 6px;
     }
 
     .ticket-card {
       margin-top: 10px;
       padding: 10px 12px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.9);
       border: 2px dashed var(--gold-accent);
       border-radius: 8px;
       text-align: center;
@@ -246,7 +251,7 @@
     }
     .ticket-sub {
       font-size: 10px;
-      color: #777;
+      color: #666;
       margin-top: 3px;
     }
     .btn-staff-use {
@@ -268,6 +273,40 @@
       font-weight: bold;
       font-size: 11px;
       border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 8px;
+      }
+      .envelope-container {
+        height: 560px;
+        border-radius: 14px;
+      }
+      .letter {
+        top: 15px;
+        left: 4%;
+        width: 92%;
+        height: 520px;
+        padding: 16px 18px 10px 18px;
+      }
+      .form-row {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .right-col-inner {
+        margin-top: 6px;
+      }
+      textarea.input-msg {
+        height: 140px;
+      }
+      input.input-pin, select.select-gift {
+        padding: 9px;
+        margin-bottom: 8px;
+      }
+      button.btn-submit {
+        padding: 8px 2px;
+      }
     }
   </style>
 </head>
@@ -324,7 +363,7 @@
         <div style="font-size:16px; font-weight:bold; color:var(--burgundy); margin-bottom:16px;">内容の確認 (最終プレビュー)</div>
         <div class="preview-card">
           <p style="margin:0 0 6px 0;"><strong>To.</strong> <span id="prevTo"></span></p>
-          <p style="margin:0 0 10px 0; white-space:pre-wrap; color:#444;" id="prevMsg"></p>
+          <p style="margin:0 0 10px 0; white-space:pre-wrap; color:#333;" id="prevMsg"></p>
           <p style="margin:0 0 10px 0; text-align:right;"><strong>From.</strong> <span id="prevFrom"></span></p>
           <p style="margin:0; font-size:11px; color:#888; border-top:1px solid #ddd; padding-top:6px;">ギフト: <span id="prevGift"></span></p>
         </div>
@@ -344,18 +383,18 @@
     <!-- 4. 받는 사람 전용 수신 화면 -->
     <div class="letter" id="receiverLetter" style="display:none;">
       <div class="receive-view">
-        <h3 style="color:var(--burgundy); margin:4px 0 10px 0; font-family:Georgia, serif; font-style:italic;">To. <span id="recTo" style="font-family:sans-serif; font-style:normal;"></span></h3>
+        <h3 style="color:var(--burgundy); margin:4px 0 10px 0; font-family:Georgia, serif; font-style:italic;">To. <span id="recTo" class="name-text" style="font-family:sans-serif; font-style:normal;"></span></h3>
 
         <div id="lockSection" class="lock-box">
           <p style="font-size:13px; color:#555; margin-bottom:12px;">12月24日開封用 暗証番号を入力してください</p>
-          <input type="password" id="recPin" class="input-pin" maxlength="4" placeholder="暗証番号4桁" style="width:60%; margin-bottom:10px;">
+          <input type="password" id="recPin" class="input-pin" maxlength="4" placeholder="暗証番号4桁" style="width:65%; margin-bottom:10px;">
           <br>
-          <button class="btn-submit" style="width:60%; padding:8px; border:1px solid #333;" onclick="unlockMessage()">開封する</button>
+          <button class="btn-submit" style="width:65%; padding:8px; border:1px solid #333;" onclick="unlockMessage()">開封する</button>
         </div>
 
         <div id="contentSection" style="display:none; text-align:left; flex:1; flex-direction:column; justify-content:space-between;">
           <div>
-            <div style="background:rgba(255,255,255,0.7); padding:12px 14px; border-radius:4px; border:1px solid #e0d8cc; font-size:13px; line-height:1.5; white-space:pre-wrap;" id="recMsg"></div>
+            <div style="background:rgba(255,255,255,0.75); padding:12px 14px; border-radius:4px; border:1px solid #e0d8cc; font-size:13px; color:#222; line-height:1.5; white-space:pre-wrap;" id="recMsg"></div>
             
             <div class="ticket-card" id="recGiftTitle" style="display:none;">
               <div class="ticket-title" id="recGiftName">🎟️ カヌレ1個 交換チケット</div>
@@ -372,7 +411,7 @@
             <a href="https://maps.google.com/?q=KURAMAE+CANNELE" target="_blank" class="maps-btn">📍 Google Mapsで場所を確認する</a>
           </div>
 
-          <div class="from-signature"><span style="font-family:Georgia, serif; font-style:italic;">From.</span> <span id="recFrom" style="font-family:sans-serif; font-style:normal;"></span></div>
+          <div class="from-signature"><span style="font-family:Georgia, serif; font-style:italic; color:var(--burgundy); font-weight:bold;">From.</span> <span id="recFrom" class="name-text" style="font-family:sans-serif; font-style:normal;"></span></div>
 
           <img src="logo.png" alt="KURAMAE CANNELÉ" class="brand-logo-bottom" onerror="this.style.display='none'">
         </div>
@@ -386,28 +425,32 @@
   let generatedShareUrl = '';
   let currentCardData = null;
 
-  // UTF-8 안전 Base64 인코딩/디코딩 함수 (유니코드 한글 문제 방지)
-  function safeBtoa(str) {
+  // 초단축 인코딩 알고리즘
+  function compressBtoa(str) {
     return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
       return String.fromCharCode('0x' + p1);
-    }));
+    })).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   }
 
-  function safeAtob(str) {
+  function decompressAtob(str) {
     try {
-      return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+      let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      return decodeURIComponent(Array.prototype.map.call(atob(b64), function(c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       }).join(''));
     } catch(e) {
-      return decodeURIComponent(atob(str)); // 기존 호환용 fallback
+      return decodeURIComponent(atob(str));
     }
   }
 
   window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     
-    if (urlParams.has('data')) {
-      setupReceiverMode(urlParams.get('data'));
+    // 신규 단축 키 'd' 또는 기존 키 'data' 처리
+    const rawData = urlParams.get('d') || urlParams.get('data');
+    if (rawData) {
+      setupReceiverMode(rawData);
       return;
     }
 
@@ -462,9 +505,10 @@
     const pin = document.getElementById('pin').value;
     const gift = document.getElementById('giftOption').value;
 
-    const payload = safeBtoa(JSON.stringify({ t: toName, f: fromName, m: msg, p: pin, g: gift }));
+    // 객체 데이터 초단축 인코딩 (키 명칭 t, f, m, p, g)
+    const payload = compressBtoa(JSON.stringify({ t: toName, f: fromName, m: msg, p: pin, g: gift }));
     const baseUrl = window.location.origin + window.location.pathname;
-    generatedShareUrl = `${baseUrl}?data=${payload}`;
+    generatedShareUrl = `${baseUrl}?d=${payload}`;
 
     if (gift === 'cannele') {
       localStorage.setItem('pending_xmas_card', generatedShareUrl);
@@ -494,7 +538,7 @@
   function setupReceiverMode(encodedData) {
     try {
       currentCardData = encodedData;
-      const data = JSON.parse(safeAtob(encodedData));
+      const data = JSON.parse(decompressAtob(encodedData));
       document.getElementById('senderLetter').style.display = 'none';
       const recLetter = document.getElementById('receiverLetter');
       recLetter.style.display = 'block';
