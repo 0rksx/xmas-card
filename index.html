@@ -15,7 +15,9 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background-color: var(--bg-color);
+      /* 보내주신 붉은 종이 배경 적용 */
+      background: url('paper_red.jpg') repeat center center;
+      background-size: cover;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -36,7 +38,7 @@
       height: 480px;
       overflow: hidden;
       border-radius: 20px;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.22);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.35);
       background-color: #3b060d;
     }
 
@@ -66,10 +68,12 @@
       z-index: 1;
     }
 
+    /* 편지지 - 보내주신 상아색 종이 텍스처 배경 적용 */
     .letter {
       position: absolute;
       top: 25px; left: 5%; width: 90%; height: 430px;
-      background-color: #ffffff;
+      background: url('paper_ivory.jpg') repeat center center;
+      background-size: cover;
       border-radius: 12px;
       padding: 24px 32px 12px 32px;
       box-sizing: border-box;
@@ -90,16 +94,34 @@
     .form-row { display: flex; gap: 24px; }
     .form-col { flex: 1; display: flex; flex-direction: column; }
     .form-group { margin-bottom: 10px; }
-    .to-label { font-size: 20px; font-weight: bold; color: var(--burgundy); margin-right: 6px; }
-    input.input-to, input.input-from { border: none; border-bottom: 2px solid #ddd; background: transparent; font-size: 15px; padding: 4px; outline: none; font-family: inherit; }
+    
+    /* To. 와 From. 폰트만 세리프(명조) 스타일로 변경 */
+    .to-label {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--burgundy);
+      margin-right: 6px;
+    }
+    
+    /* 이름 적는 칸은 고딕 폰트 유지 */
+    input.input-to, input.input-from {
+      border: none;
+      border-bottom: 1px solid #aaa;
+      background: transparent;
+      font-size: 15px;
+      padding: 4px;
+      outline: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
+    }
     input.input-to { width: 75%; }
     input.input-from { width: 70%; }
     
     textarea.input-msg {
       width: 100%;
       height: 210px;
-      border: 1px solid #e0d8cc;
-      background-color: #faf7f2;
+      border: 1px solid #d4ceb8;
+      background-color: rgba(255, 255, 255, 0.6);
       border-radius: 8px;
       padding: 12px;
       box-sizing: border-box;
@@ -109,15 +131,53 @@
       outline: none;
       font-family: inherit;
     }
-    .char-count { text-align: right; font-size: 11px; color: #888; margin-top: 3px; }
+    .char-count { text-align: right; font-size: 11px; color: #777; margin-top: 3px; }
     
     .right-col-inner {
       margin-top: 40px;
     }
 
-    input.input-pin { width: 100%; padding: 11px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; box-sizing: border-box; outline: none; margin-bottom: 12px; }
-    select.select-gift { width: 100%; padding: 11px; border: 1px solid #ddd; border-radius: 8px; font-size: 12px; margin-bottom: 16px; background: #fff; }
-    button.btn-submit { width: 100%; padding: 14px; background-color: var(--burgundy); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(98, 12, 23, 0.3); }
+    input.input-pin {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #d4ceb8;
+      background-color: rgba(255, 255, 255, 0.6);
+      border-radius: 8px;
+      font-size: 13px;
+      box-sizing: border-box;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    
+    select.select-gift {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #d4ceb8;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 8px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    
+    /* 봉인 버튼: 배경 삭제, 검정색 얇은 고딕 폰트, 2pt 작은 12px 크기 */
+    button.btn-submit {
+      width: 100%;
+      padding: 10px 4px;
+      background: transparent;
+      color: #222222;
+      border: none;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      box-shadow: none;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    button.btn-submit:hover {
+      color: #000;
+      font-weight: 500;
+    }
 
     .brand-logo-bottom {
       max-width: 60px;
@@ -161,8 +221,8 @@
       box-sizing: border-box;
       overflow-y: auto;
     }
-    .lock-box { background: #faf7f2; padding: 20px; border-radius: 12px; border: 1px solid #e0d8cc; margin-top: 15px; }
-    .store-info { margin-top: 8px; font-size: 11px; color: #666; background: #faf7f2; padding: 8px; border-radius: 6px; border: 1px solid #eee; text-align: left; }
+    .lock-box { background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 12px; border: 1px solid #e0d8cc; margin-top: 15px; }
+    .store-info { margin-top: 8px; font-size: 11px; color: #666; background: rgba(255, 255, 255, 0.8); padding: 8px; border-radius: 6px; border: 1px solid #eee; text-align: left; }
     .maps-btn { display: inline-block; margin-top: 4px; color: var(--burgundy); font-weight: bold; text-decoration: none; }
     .from-signature {
       text-align: right;
@@ -173,15 +233,13 @@
       margin-top: 6px;
     }
 
-    /* 티켓 및 스태프 사용완료 버튼 디자인 */
     .ticket-card {
       margin-top: 10px;
       padding: 10px 12px;
-      background: #fdfaf6;
+      background: rgba(255, 255, 255, 0.85);
       border: 2px dashed var(--gold-accent);
       border-radius: 10px;
       text-align: center;
-      box-shadow: inset 0 0 10px rgba(197, 160, 89, 0.1);
     }
     .ticket-title {
       color: var(--burgundy);
@@ -191,7 +249,7 @@
     }
     .ticket-sub {
       font-size: 10px;
-      color: #888;
+      color: #777;
       margin-top: 3px;
     }
     .btn-staff-use {
@@ -238,7 +296,7 @@
             <div class="char-count"><span id="currentCount">0</span> / 100文字</div>
           </div>
           <div class="form-group" style="text-align: right; margin-top: 4px;">
-            <span class="to-label" style="font-size: 17px;">From.</span>
+            <span class="to-label" style="font-size: 19px;">From.</span>
             <input type="text" id="fromName" class="input-from" placeholder="差出人のお名前">
           </div>
         </div>
@@ -289,28 +347,24 @@
     <!-- 4. 받는 사람 전용 수신 화면 -->
     <div class="letter" id="receiverLetter" style="display:none;">
       <div class="receive-view">
-        <h3 style="color:var(--burgundy); margin:4px 0 10px 0;">To. <span id="recTo"></span></h3>
+        <h3 style="color:var(--burgundy); margin:4px 0 10px 0; font-family:Georgia, serif;">To. <span id="recTo" style="font-family:sans-serif;"></span></h3>
 
         <div id="lockSection" class="lock-box">
           <p style="font-size:13px; color:#555; margin-bottom:12px;">12月24日開封用 暗証番号を入力してください</p>
           <input type="password" id="recPin" class="input-pin" maxlength="4" placeholder="暗証番号4桁" style="width:60%; margin-bottom:10px;">
           <br>
-          <button class="btn-submit" style="width:60%; padding:10px;" onclick="unlockMessage()">開封する</button>
+          <button class="btn-submit" style="width:60%; padding:8px; border:1px solid #333;" onclick="unlockMessage()">開封する</button>
         </div>
 
         <div id="contentSection" style="display:none; text-align:left; flex:1; flex-direction:column; justify-content:space-between;">
           <div>
-            <div style="background:#faf7f2; padding:12px 14px; border-radius:8px; border:1px solid #e0d8cc; font-size:13px; line-height:1.5; white-space:pre-wrap;" id="recMsg"></div>
+            <div style="background:rgba(255,255,255,0.7); padding:12px 14px; border-radius:8px; border:1px solid #e0d8cc; font-size:13px; line-height:1.5; white-space:pre-wrap;" id="recMsg"></div>
             
-            <!-- 실물 티켓 및 스태프 사용완료 버튼 -->
             <div class="ticket-card" id="recGiftTitle" style="display:none;">
               <div class="ticket-title" id="recGiftName">🎟️ カヌレ1個 交換チケット</div>
               <div class="ticket-sub">※店頭ご注文時に本画面をスタッフへご提示ください</div>
               
-              <!-- 스태프 확인 버튼 -->
               <button class="btn-staff-use" id="staffUseBtn" onclick="useTicketByStaff()">[店舗スタッフ確認] 使用済みにする</button>
-              
-              <!-- 사용 완료 처리 상태 표시 -->
               <div class="used-badge" id="usedBadge">✓ 使用済み (<span id="usedTime"></span>)</div>
             </div>
           </div>
@@ -321,7 +375,7 @@
             <a href="https://maps.google.com/?q=KURAMAE+CANNELE" target="_blank" class="maps-btn">📍 Google Mapsで場所を確認する</a>
           </div>
 
-          <div class="from-signature">From. <span id="recFrom"></span></div>
+          <div class="from-signature"><span style="font-family:Georgia, serif;">From.</span> <span id="recFrom" style="font-family:sans-serif;"></span></div>
 
           <img src="logo.png" alt="KURAMAE CANNELÉ" class="brand-logo-bottom" onerror="this.style.display='none'">
         </div>
@@ -465,7 +519,6 @@
           storeBox.style.display = 'none';
         }
 
-        // 사용 완료 상태 확인 (로컬 스토리지에 기록된 데이터 확인)
         const usedStatus = localStorage.getItem('used_ticket_' + currentCardData);
         if (usedStatus) {
           document.getElementById('staffUseBtn').style.display = 'none';
@@ -479,7 +532,6 @@
     }
   }
 
-  // 매장 스태프 전용 사용완료 처리 함수
   function useTicketByStaff() {
     if (confirm('【店舗スタッフ確認】\nこのチケットを使用済みにしますか？\n（※一度使用済みにすると元に戻せません）')) {
       const now = new Date();
