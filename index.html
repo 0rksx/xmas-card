@@ -14,7 +14,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", "メイリオ", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
       background-color: var(--bg-color);
       display: flex;
       justify-content: center;
@@ -40,6 +40,7 @@
       background-color: #3b060d;
     }
 
+    /* 이미지 배경층 */
     .bg-closed {
       position: absolute;
       top: 0;
@@ -63,6 +64,7 @@
       z-index: 1;
     }
 
+    /* 편지지 */
     .letter {
       position: absolute;
       top: 25px;
@@ -79,6 +81,7 @@
       z-index: 2;
     }
 
+    /* 애니메이션 상태 */
     .envelope-container.open .bg-closed {
       opacity: 0;
       pointer-events: none;
@@ -87,7 +90,6 @@
       transform: translateY(0);
     }
 
-    /* 봉인 애니메이션: 편지가 봉투 안으로 쏙 들어가고 닫힌 봉투가 덮임 */
     .envelope-container.sealed .letter {
       transform: translateY(340px) !important;
       transition: transform 1s ease-in-out !important;
@@ -97,219 +99,50 @@
       transition: opacity 0.8s ease-in-out 0.5s !important;
     }
 
-    .form-row {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 12px;
-    }
-    .form-col {
-      flex: 1;
-    }
+    /* 폼 스타일링 */
+    .form-row { display: flex; gap: 20px; margin-bottom: 12px; }
+    .form-col { flex: 1; }
+    .form-group { margin-bottom: 12px; }
+    .to-label { font-family: Georgia, serif; font-size: 22px; font-weight: bold; color: var(--burgundy); margin-right: 8px; }
+    input.input-to { border: none; border-bottom: 2px solid #ddd; background: transparent; font-size: 16px; padding: 4px; width: 80%; outline: none; }
+    textarea.input-msg { width: 100%; height: 120px; border: 1px solid #e0d8cc; background-color: #faf7f2; border-radius: 8px; padding: 12px; box-sizing: border-box; font-size: 13.5px; line-height: 1.6; resize: none; outline: none; }
+    .char-count { text-align: right; font-size: 11px; color: #888; margin-top: 4px; }
+    input.input-pin { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; box-sizing: border-box; outline: none; }
+    select.select-gift { width: 100%; padding: 11px; border: 1px solid #ddd; border-radius: 8px; font-size: 12px; margin-bottom: 10px; background: #fff; }
+    button.btn-submit { width: 100%; padding: 14px; background-color: var(--burgundy); color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(98, 12, 23, 0.3); }
 
-    .form-group {
-      margin-bottom: 12px;
-    }
-    .to-label {
-      font-family: Georgia, serif;
-      font-size: 22px;
-      font-weight: bold;
-      color: var(--burgundy);
-      display: inline-block;
-      margin-right: 8px;
-    }
-    input.input-to {
-      border: none;
-      border-bottom: 2px solid #ddd;
-      background: transparent;
-      font-size: 16px;
-      padding: 4px;
-      width: 80%;
-      outline: none;
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Hiragino Sans", sans-serif;
-    }
-    input.input-to:focus {
-      border-bottom-color: var(--burgundy);
-    }
-    textarea.input-msg {
-      width: 100%;
-      height: 120px;
-      border: 1px solid #e0d8cc;
-      background-color: #faf7f2;
-      border-radius: 8px;
-      padding: 12px;
-      box-sizing: border-box;
-      font-size: 13.5px;
-      line-height: 1.6;
-      resize: none;
-      outline: none;
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
-    }
-    textarea.input-msg:focus {
-      border-color: var(--burgundy);
-      background-color: #fff;
-    }
-    .char-count {
-      text-align: right;
-      font-size: 11px;
-      color: #888;
-      margin-top: 4px;
-      margin-bottom: 4px;
-    }
-    input.input-pin {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 13px;
-      box-sizing: border-box;
-      outline: none;
-    }
-    select.select-gift {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 12px;
-      margin-bottom: 10px;
-      background: #fff;
-    }
-    button.btn-submit {
-      width: 100%;
-      padding: 14px;
-      background-color: var(--burgundy);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(98, 12, 23, 0.3);
-    }
-
-    /* 프리뷰 모달 팝업 */
+    /* 프리뷰 팝업 */
     .preview-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+      z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
     }
-    .preview-modal.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .preview-content {
-      background: #fff;
-      width: 90%;
-      max-width: 400px;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      text-align: center;
-    }
-    .preview-title {
-      font-size: 16px;
-      font-weight: bold;
-      color: var(--burgundy);
-      margin-bottom: 16px;
-    }
-    .preview-card {
-      background: #faf7f2;
-      border: 1px solid #e0d8cc;
-      border-radius: 8px;
-      padding: 16px;
-      text-align: left;
-      margin-bottom: 20px;
-      font-size: 13px;
-    }
-    .preview-btn-group {
-      display: flex;
-      gap: 10px;
-    }
-    .btn-edit {
-      flex: 1;
-      padding: 12px;
-      border: 1px solid #ccc;
-      background: #fff;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .btn-confirm {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      background: var(--burgundy);
-      color: #fff;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    .preview-modal.show { opacity: 1; pointer-events: auto; }
+    .preview-content { background: #fff; width: 90%; max-width: 400px; border-radius: 16px; padding: 24px; text-align: center; }
+    .preview-card { background: #faf7f2; border: 1px solid #e0d8cc; border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 20px; font-size: 13px; }
+    .preview-btn-group { display: flex; gap: 10px; }
+    .btn-edit { flex: 1; padding: 12px; border: 1px solid #ccc; background: #fff; border-radius: 8px; cursor: pointer; }
+    .btn-confirm { flex: 1; padding: 12px; border: none; background: var(--burgundy); color: #fff; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-    /* 완료 화면 */
-    .result-screen {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at 50% 50%, #4a0810, #220205);
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      text-align: center;
-      padding: 30px;
-      box-sizing: border-box;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 1s ease-in-out;
-      z-index: 10;
+    /* 고급 완료 레이아웃 OVERLAY */
+    .result-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(40, 5, 10, 0.65);
+      z-index: 6; display: flex; flex-direction: column; justify-content: center; align-items: center;
+      color: #fff; text-align: center; padding: 24px; box-sizing: border-box;
+      opacity: 0; pointer-events: none; transition: opacity 0.8s ease-in-out;
     }
-    .result-screen.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .result-screen .date-notice {
-      font-size: 15px;
-      color: #e2d4c0;
-      margin-bottom: 20px;
-      letter-spacing: 0.5px;
-    }
-    .result-screen h1.main-title {
-      font-family: "Didot", "Bodoni MT", Georgia, serif;
-      font-size: 34px;
-      letter-spacing: 4px;
-      color: var(--gold-light);
-      margin: 0 0 10px 0;
-    }
-    .result-screen p.sub-title {
-      font-family: Georgia, serif;
-      font-size: 16px;
-      letter-spacing: 2px;
-      color: var(--gold-accent);
-      margin: 0 0 35px 0;
-      font-style: italic;
-    }
-    .btn-share {
-      background-color: #06c755;
-      color: white;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    .result-overlay.show { opacity: 1; pointer-events: auto; }
+    .result-overlay .date-notice { font-size: 14px; color: #e2d4c0; margin-bottom: 12px; letter-spacing: 0.5px; }
+    .result-overlay h1.main-title { font-family: "Didot", Georgia, serif; font-size: 32px; letter-spacing: 3px; color: var(--gold-light); margin: 0 0 4px 0; }
+    .result-overlay p.sub-title { font-family: Georgia, serif; font-size: 14px; letter-spacing: 1.5px; color: var(--gold-accent); margin: 0 0 28px 0; font-style: italic; }
+    .btn-share { background-color: #06c755; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(6, 199, 85, 0.3); }
+
+    /* 수신자 화면 */
+    .receive-view { padding: 10px; text-align: center; }
+    .lock-box { background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 20px; }
+    .store-info { margin-top: 15px; font-size: 11px; color: #666; background: #faf7f2; padding: 10px; border-radius: 6px; border: 1px solid #eee; }
+    .maps-btn { display: inline-block; margin-top: 6px; color: var(--burgundy); font-weight: bold; text-decoration: none; }
   </style>
 </head>
 <body>
@@ -320,7 +153,8 @@
     <div class="bg-closed"></div>
     <div class="bg-opened"></div>
 
-    <div class="letter">
+    <!-- 1. 작성용 편지 -->
+    <div class="letter" id="senderLetter">
       <div class="form-row">
         <div class="form-col">
           <div class="form-group">
@@ -349,14 +183,14 @@
       </div>
     </div>
 
-    <!-- 미리보기 팝업 모달 -->
+    <!-- 2. 프리뷰 팝업 -->
     <div class="preview-modal" id="previewModal">
       <div class="preview-content">
-        <div class="preview-title">内容の確認 (最終プレビュー)</div>
+        <div style="font-size:16px; font-weight:bold; color:var(--burgundy); margin-bottom:16px;">内容の確認 (最終プレビュー)</div>
         <div class="preview-card">
-          <p style="margin: 0 0 8px 0;"><strong>To.</strong> <span id="prevTo"></span></p>
-          <p style="margin: 0 0 12px 0; white-space: pre-wrap; color: #444;" id="prevMsg"></p>
-          <p style="margin: 0; font-size: 11px; color: #888;">ギフト: <span id="prevGift"></span></p>
+          <p style="margin:0 0 8px 0;"><strong>To.</strong> <span id="prevTo"></span></p>
+          <p style="margin:0 0 12px 0; white-space:pre-wrap; color:#444;" id="prevMsg"></p>
+          <p style="margin:0; font-size:11px; color:#888;">ギフト: <span id="prevGift"></span></p>
         </div>
         <div class="preview-btn-group">
           <button class="btn-edit" onclick="closePreview()">修正する</button>
@@ -365,36 +199,64 @@
       </div>
     </div>
 
-    <div class="result-screen" id="resultScreen">
+    <!-- 3. 고급 봉인 완료 오버레이 화면 -->
+    <div class="result-overlay" id="resultOverlay">
       <div class="date-notice">12月24日にメッセージが届きます</div>
       <h1 class="main-title">MERRY CHRISTMAS</h1>
       <p class="sub-title">with KURAMAE CANNELÉ</p>
-      <button class="btn-share" onclick="alert('LINE共有リンクがコピーされました！')">LINEで相手に贈る</button>
+      <button class="btn-share" onclick="copyShareLink()">LINEで相手に贈る (リンクコピー)</button>
+    </div>
+
+    <!-- 4. 받는 사람 전용 수신 화면 -->
+    <div class="letter" id="receiverLetter" style="display:none;">
+      <div class="receive-view">
+        <h3 style="color:var(--burgundy); margin:0 0 10px 0;">To. <span id="recTo"></span></h3>
+        
+        <div id="lockSection" class="lock-box">
+          <p style="font-size:13px; color:#555; margin-bottom:12px;">12月24日開封用 暗証番号を入力してください</p>
+          <input type="password" id="recPin" class="input-pin" maxlength="4" placeholder="暗証番号4桁" style="width:60%; margin-bottom:10px;">
+          <br>
+          <button class="btn-submit" style="width:60%; padding:10px;" onclick="unlockMessage()">開封する</button>
+        </div>
+
+        <div id="contentSection" style="display:none; text-align:left; margin-top:10px;">
+          <div style="background:#faf7f2; padding:15px; border-radius:8px; border:1px solid #e0d8cc; font-size:13px; line-height:1.6; white-space:pre-wrap;" id="recMsg"></div>
+          <div style="margin-top:12px; padding:10px; background:#fff3f4; border-radius:8px; text-align:center; color:var(--burgundy); font-weight:bold; font-size:13px;" id="recGiftTitle"></div>
+          
+          <div class="store-info">
+            ※本チケットは「クラマエ カヌレ 本店（蔵前）」でのみご利用いただけます。<br>
+            住所: 東京都台東区蔵前2-1-23 (蔵前駅 徒歩2分)<br>
+            <a href="https://maps.google.com/?q=KURAMAE+CANNELE" target="_blank" class="maps-btn">📍 Google Mapsで場所を確認する</a>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
 </div>
 
 <script>
+  let generatedShareUrl = '';
+
   window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('status') === 'success') {
-      const container = document.getElementById('envelopeContainer');
-      container.classList.add('open');
-      document.getElementById('resultScreen').classList.add('show');
+    
+    // 수신 모드 (데이터가 URL에 포함된 경우)
+    if (urlParams.has('data')) {
+      setupReceiverMode(urlParams.get('data'));
       return;
     }
 
+    // 기본 보냄 모드 애니메이션
     setTimeout(() => {
       document.getElementById('envelopeContainer').classList.add('open');
-    }, 2000);
+    }, 1500);
   });
 
   function updateCharCount(textarea) {
     document.getElementById('currentCount').innerText = textarea.value.length;
   }
 
-  // 프리뷰 팝업 열기
   function openPreview() {
     const toName = document.getElementById('toName').value;
     const msg = document.getElementById('message').value;
@@ -402,14 +264,8 @@
     const giftSelect = document.getElementById('giftOption');
     const giftText = giftSelect.options[giftSelect.selectedIndex].text;
 
-    if (!msg) {
-      alert('メッセージを入力してください。');
-      return;
-    }
-    if (!pin || pin.length < 4) {
-      alert('暗証番号4桁を入力してください。');
-      return;
-    }
+    if (!msg) { alert('メッセージを入力してください。'); return; }
+    if (!pin || pin.length < 4) { alert('暗証番号4桁を入力してください。'); return; }
 
     document.getElementById('prevTo').innerText = toName || 'お名前なし';
     document.getElementById('prevMsg').innerText = msg;
@@ -422,11 +278,19 @@
     document.getElementById('previewModal').classList.remove('show');
   }
 
-  // 최종 확인 후 봉인 애니메이션 및 결제 진행
   function confirmAndSubmit() {
     closePreview();
+    const toName = document.getElementById('toName').value;
+    const msg = document.getElementById('message').value;
+    const pin = document.getElementById('pin').value;
     const gift = document.getElementById('giftOption').value;
 
+    // URL 공유용 데이터 인코딩
+    const payload = btoa(encodeURIComponent(JSON.stringify({ t: toName, m: msg, p: pin, g: gift })));
+    const baseUrl = window.location.origin + window.location.pathname;
+    generatedShareUrl = `${baseUrl}?data=${payload}`;
+
+    // 봉인 애니메이션 (편지가 안으로 들어가고 덮개가 위에서 아래로 닫힘)
     const container = document.getElementById('envelopeContainer');
     container.classList.remove('open');
     container.classList.add('sealed');
@@ -435,12 +299,53 @@
       if (gift === 'cannele') {
         window.location.href = 'https://square.link/u/4U1MkTXp';
         return;
-      } else if (gift === 'set') {
-        alert('1,000円の決済リンクは準備中です。500円ギフトをお試しください。');
-        return;
       }
-      document.getElementById('resultScreen').classList.add('show');
+      document.getElementById('resultOverlay').classList.add('show');
     }, 1600);
+  }
+
+  // LINE 공유 / 실제 URL 복사 기능
+  function copyShareLink() {
+    if (!generatedShareUrl) generatedShareUrl = window.location.href;
+    
+    navigator.clipboard.writeText(generatedShareUrl).then(() => {
+      alert('LINE共有用リンクがコピーされました！\n相手にURLを送信してください。');
+    }).catch(() => {
+      prompt('以下のURLをコピーして相手に送信してください:', generatedShareUrl);
+    });
+  }
+
+  // 수신자 모드 설정
+  function setupReceiverMode(encodedData) {
+    try {
+      const data = JSON.parse(decodeURIComponent(atob(encodedData)));
+      document.getElementById('senderLetter').style.display = 'none';
+      const recLetter = document.getElementById('receiverLetter');
+      recLetter.style.display = 'block';
+
+      document.getElementById('recTo').innerText = data.t || 'お客様';
+      
+      const container = document.getElementById('envelopeContainer');
+      setTimeout(() => { container.classList.add('open'); }, 1200);
+
+      window.unlockMessage = function() {
+        const inputPin = document.getElementById('recPin').value;
+        if (inputPin !== data.p) {
+          alert('暗証番号が一致しません。');
+          return;
+        }
+        document.getElementById('lockSection').style.display = 'none';
+        document.getElementById('contentSection').style.display = 'block';
+        document.getElementById('recMsg').innerText = data.m;
+        
+        let giftTitle = '🎁 メッセージカード';
+        if (data.g === 'cannele') giftTitle = '🎁 カヌレ1個 ギフトチケット (蔵前本店限定)';
+        else if (data.g === 'set') giftTitle = '🎁 カヌレ＆紅茶セット チケット (蔵前本店限定)';
+        document.getElementById('recGiftTitle').innerText = giftTitle;
+      };
+    } catch(e) {
+      alert('有効なカードデータではありません。');
+    }
   }
 </script>
 </body>
