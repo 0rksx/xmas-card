@@ -71,7 +71,7 @@
       top: 25px; left: 5%; width: 90%; height: 430px;
       background-color: #ffffff;
       border-radius: 12px;
-      padding: 24px 32px;
+      padding: 24px 32px 16px 32px;
       box-sizing: border-box;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       transform: translateY(320px);
@@ -84,18 +84,41 @@
     .envelope-container.sealed .letter { transform: translateY(340px) !important; transition: transform 1s ease-in-out !important; }
     .envelope-container.sealed .bg-final { top: 0 !important; }
 
-    .form-row { display: flex; gap: 20px; margin-bottom: 8px; }
-    .form-col { flex: 1; }
+    .form-row { display: flex; gap: 24px; margin-bottom: 4px; }
+    .form-col { flex: 1; display: flex; flex-direction: column; }
     .form-group { margin-bottom: 10px; }
     .to-label { font-size: 20px; font-weight: bold; color: var(--burgundy); margin-right: 6px; }
     input.input-to, input.input-from { border: none; border-bottom: 2px solid #ddd; background: transparent; font-size: 15px; padding: 4px; outline: none; font-family: inherit; }
     input.input-to { width: 75%; }
     input.input-from { width: 70%; }
-    textarea.input-msg { width: 100%; height: 110px; border: 1px solid #e0d8cc; background-color: #faf7f2; border-radius: 8px; padding: 10px; box-sizing: border-box; font-size: 13.5px; line-height: 1.6; resize: none; outline: none; font-family: inherit; }
-    .char-count { text-align: right; font-size: 11px; color: #888; margin-top: 2px; }
-    input.input-pin { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; box-sizing: border-box; outline: none; }
-    select.select-gift { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 12px; margin-bottom: 8px; background: #fff; }
-    button.btn-submit { width: 100%; padding: 13px; background-color: var(--burgundy); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(98, 12, 23, 0.3); }
+    
+    /* 메시지 입력창 높이를 210px로 확장 */
+    textarea.input-msg {
+      width: 100%;
+      height: 210px;
+      border: 1px solid #e0d8cc;
+      background-color: #faf7f2;
+      border-radius: 8px;
+      padding: 12px;
+      box-sizing: border-box;
+      font-size: 13.5px;
+      line-height: 1.6;
+      resize: none;
+      outline: none;
+      font-family: inherit;
+    }
+    .char-count { text-align: right; font-size: 11px; color: #888; margin-top: 3px; }
+    input.input-pin { width: 100%; padding: 11px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; box-sizing: border-box; outline: none; }
+    select.select-gift { width: 100%; padding: 11px; border: 1px solid #ddd; border-radius: 8px; font-size: 12px; margin-bottom: 8px; background: #fff; }
+    button.btn-submit { width: 100%; padding: 14px; background-color: var(--burgundy); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(98, 12, 23, 0.3); }
+
+    /* 로고 크기 축소(60px) 및 하단 정중앙 배치 */
+    .brand-logo-bottom {
+      max-width: 60px;
+      height: auto;
+      margin: 8px auto 0 auto;
+      display: block;
+    }
 
     /* 프리뷰 팝업 */
     .preview-modal {
@@ -132,17 +155,9 @@
       box-sizing: border-box;
       overflow-y: auto;
     }
-    /* 로고 크기 절반 축소(60px) 및 하단 정중앙 배치 */
-    .brand-logo-bottom {
-      max-width: 60px;
-      height: auto;
-      margin: 12px auto 0 auto;
-      display: block;
-    }
     .lock-box { background: #faf7f2; padding: 20px; border-radius: 12px; border: 1px solid #e0d8cc; margin-top: 15px; }
     .store-info { margin-top: 10px; font-size: 11px; color: #666; background: #faf7f2; padding: 10px; border-radius: 6px; border: 1px solid #eee; text-align: left; }
     .maps-btn { display: inline-block; margin-top: 4px; color: var(--burgundy); font-weight: bold; text-decoration: none; }
-    
     .from-signature {
       text-align: right;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
@@ -165,6 +180,7 @@
     <!-- 1. 작성용 편지 -->
     <div class="letter" id="senderLetter">
       <div class="form-row">
+        <!-- 왼쪽 열: To, 확장된 메시지 입력창, From -->
         <div class="form-col">
           <div class="form-group">
             <span class="to-label">To.</span>
@@ -180,7 +196,8 @@
           </div>
         </div>
 
-        <div class="form-col" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <!-- 오른쪽 열: 암호, 기프트, 봉인 버튼 -->
+        <div class="form-col" style="justify-content: space-between;">
           <div>
             <div class="form-group">
               <input type="password" id="pin" class="input-pin" maxlength="4" inputmode="numeric" placeholder="暗証番号 (4桁の数字)">
@@ -196,6 +213,9 @@
           <button class="btn-submit" onclick="openPreview()">メッセージカードを封印して贈る</button>
         </div>
       </div>
+
+      <!-- 작성 화면 하단 정중앙 소형 로고(60px) -->
+      <img src="logo.png" alt="KURAMAE CANNELÉ" class="brand-logo-bottom" onerror="this.style.display='none'">
     </div>
 
     <!-- 2. 프리뷰 팝업 -->
@@ -226,7 +246,6 @@
       <div class="receive-view">
         <h3 style="color:var(--burgundy); margin:4px 0 12px 0;">To. <span id="recTo"></span></h3>
 
-        <!-- 암호 입력창 -->
         <div id="lockSection" class="lock-box">
           <p style="font-size:13px; color:#555; margin-bottom:12px;">12月24日開封用 暗証番号を入力してください</p>
           <input type="password" id="recPin" class="input-pin" maxlength="4" placeholder="暗証番号4桁" style="width:60%; margin-bottom:10px;">
@@ -234,27 +253,21 @@
           <button class="btn-submit" style="width:60%; padding:10px;" onclick="unlockMessage()">開封する</button>
         </div>
 
-        <!-- 메시지 및 기프트 내용 -->
         <div id="contentSection" style="display:none; text-align:left; flex:1; flex-direction:column; justify-content:space-between;">
           <div>
-            <!-- 메시지 본문 -->
             <div style="background:#faf7f2; padding:14px 16px; border-radius:8px; border:1px solid #e0d8cc; font-size:13.5px; line-height:1.6; white-space:pre-wrap;" id="recMsg"></div>
-            
-            <!-- 기프트 선택 시에만 표시 -->
             <div style="margin-top:8px; padding:10px; background:#fff3f4; border-radius:8px; text-align:center; color:var(--burgundy); font-weight:bold; font-size:13px; display:none;" id="recGiftTitle"></div>
           </div>
 
-          <!-- 500엔 / 1000엔 선택 시에만 주소 박스 표시 -->
           <div class="store-info" id="storeInfoBox" style="display:none;">
             ※本チケットは「クラマエ カヌレ 本店（蔵前）」でのみご利用いただけます。<br>
             住所: 東京都台東区蔵前2-1-23 (蔵前駅 徒歩2分)<br>
             <a href="https://maps.google.com/?q=KURAMAE+CANNELE" target="_blank" class="maps-btn">📍 Google Mapsで場所を確認する</a>
           </div>
 
-          <!-- 우측 하단 From. 영역 -->
           <div class="from-signature">From. <span id="recFrom"></span></div>
 
-          <!-- 메시지 상자 및 From. 아래 정중앙 소형 로고(크기 50% 축소) -->
+          <!-- 수신 화면 하단 정중앙 소형 로고(60px) -->
           <img src="logo.png" alt="KURAMAE CANNELÉ" class="brand-logo-bottom" onerror="this.style.display='none'">
         </div>
       </div>
