@@ -40,7 +40,7 @@
       background-color: #3b060d;
     }
 
-    /* 이미지 배경층 */
+    /* 1. 처음의 닫힌 순정 봉투 (문구 없음) */
     .bg-closed {
       position: absolute;
       top: 0;
@@ -53,6 +53,20 @@
       transition: opacity 0.8s ease-in-out;
     }
 
+    /* 2. 마지막에 위에서부터 떨어지며 봉인될 문구 봉투 (with KURAMAE CANNELÉ) */
+    .bg-final {
+      position: absolute;
+      top: -100%; /* 처음에는 위쪽에 숨겨둠 */
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('envelope_final.jpg') no-repeat center center;
+      background-size: cover;
+      z-index: 5; /* .bg-closed와 동급 혹은 위쪽 */
+      transition: top 1.2s cubic-bezier(0.25, 1, 0.5, 1); /* 위에서 아래로 닫히는 모션 */
+    }
+
+    /* 3. 열린 원본 이미지 배경 */
     .bg-opened {
       position: absolute;
       top: 0;
@@ -90,16 +104,16 @@
       transform: translateY(0);
     }
 
+    /* 봉인 시: 편지가 먼저 아래로 빨려 들어가고, 이어서 최종 봉투가 위에서 뚝 떨어짐 */
     .envelope-container.sealed .letter {
       transform: translateY(340px) !important;
       transition: transform 1s ease-in-out !important;
     }
-    .envelope-container.sealed .bg-closed {
-      opacity: 1 !important;
-      transition: opacity 0.8s ease-in-out 0.5s !important;
+    .envelope-container.sealed .bg-final {
+      top: 0 !important; /* 위에서 스르륵 100% 닫힘 */
     }
 
-    /* 폼 스타일링 */
+    /* 폼 및 텍스트 스타일 */
     .form-row { display: flex; gap: 20px; margin-bottom: 12px; }
     .form-col { flex: 1; }
     .form-group { margin-bottom: 12px; }
@@ -111,7 +125,7 @@
     select.select-gift { width: 100%; padding: 11px; border: 1px solid #ddd; border-radius: 8px; font-size: 12px; margin-bottom: 10px; background: #fff; }
     button.btn-submit { width: 100%; padding: 14px; background-color: var(--burgundy); color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(98, 12, 23, 0.3); }
 
-    /* 프리뷰 팝업 */
+    /* 프리뷰 모달 팝업 */
     .preview-modal {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
@@ -124,19 +138,17 @@
     .btn-edit { flex: 1; padding: 12px; border: 1px solid #ccc; background: #fff; border-radius: 8px; cursor: pointer; }
     .btn-confirm { flex: 1; padding: 12px; border: none; background: var(--burgundy); color: #fff; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-    /* 고급 완료 레이아웃 OVERLAY */
+    /* 완료 오버레이 레이어 (z-index를 봉인 봉투(5)보다 높은 6으로 설정해 위에 뜨도록 함) */
     .result-overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(40, 5, 10, 0.65);
+      background: rgba(40, 5, 10, 0.4); /* 최종 봉투 무드가 살도록 약간 투명한 버건디 섀도우 */
       z-index: 6; display: flex; flex-direction: column; justify-content: center; align-items: center;
       color: #fff; text-align: center; padding: 24px; box-sizing: border-box;
       opacity: 0; pointer-events: none; transition: opacity 0.8s ease-in-out;
     }
     .result-overlay.show { opacity: 1; pointer-events: auto; }
-    .result-overlay .date-notice { font-size: 14px; color: #e2d4c0; margin-bottom: 12px; letter-spacing: 0.5px; }
-    .result-overlay h1.main-title { font-family: "Didot", Georgia, serif; font-size: 32px; letter-spacing: 3px; color: var(--gold-light); margin: 0 0 4px 0; }
-    .result-overlay p.sub-title { font-family: Georgia, serif; font-size: 14px; letter-spacing: 1.5px; color: var(--gold-accent); margin: 0 0 28px 0; font-style: italic; }
-    .btn-share { background-color: #06c755; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(6, 199, 85, 0.3); }
+    .result-overlay .date-notice { font-size: 14px; color: #e2d4c0; margin-bottom: 120px; /* 문구 위치에 맞춰 간격 조정 */ letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+    .btn-share { background-color: #06c755; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(6, 199, 85, 0.35); }
 
     /* 수신자 화면 */
     .receive-view { padding: 10px; text-align: center; }
@@ -151,6 +163,7 @@
   <div class="envelope-container" id="envelopeContainer">
     
     <div class="bg-closed"></div>
+    <div class="bg-final"></div> <!-- 추가된 닫기 전용 문구 봉투 -->
     <div class="bg-opened"></div>
 
     <!-- 1. 작성용 편지 -->
@@ -199,11 +212,9 @@
       </div>
     </div>
 
-    <!-- 3. 고급 봉인 완료 오버레이 화면 -->
+    <!-- 3. 고급 봉인 완료 오버레이 화면 (최종 봉투 이미지 위에 LINE 공유 버튼만 노출) -->
     <div class="result-overlay" id="resultOverlay">
       <div class="date-notice">12月24日にメッセージが届きます</div>
-      <h1 class="main-title">MERRY CHRISTMAS</h1>
-      <p class="sub-title">with KURAMAE CANNELÉ</p>
       <button class="btn-share" onclick="copyShareLink()">LINEで相手に贈る (リンクコピー)</button>
     </div>
 
@@ -290,7 +301,7 @@
     const baseUrl = window.location.origin + window.location.pathname;
     generatedShareUrl = `${baseUrl}?data=${payload}`;
 
-    // 봉인 애니메이션 (편지가 안으로 들어가고 덮개가 위에서 아래로 닫힘)
+    // 봉인 애니메이션 (편지가 안으로 완전히 들어가고, 그 위에 최종 문구 봉투가 위에서 내려와 닫힘)
     const container = document.getElementById('envelopeContainer');
     container.classList.remove('open');
     container.classList.add('sealed');
@@ -301,7 +312,7 @@
         return;
       }
       document.getElementById('resultOverlay').classList.add('show');
-    }, 1600);
+    }, 1500);
   }
 
   // LINE 공유 / 실제 URL 복사 기능
