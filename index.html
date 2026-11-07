@@ -20,24 +20,27 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      overflow-x: hidden;
     }
     .container {
       width: 100%;
-      max-width: 420px;
-      padding: 16px;
+      max-width: 440px;
+      padding: 12px;
       box-sizing: border-box;
     }
 
+    /* 카드 전체 프레임 비율 조정 */
     .envelope-container {
       position: relative;
       width: 100%;
-      height: 540px;
+      height: 620px;
       overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 16px 36px rgba(0,0,0,0.25);
+      border-radius: 16px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.2);
+      background-color: #3b060d;
     }
 
-    /* 1. 닫힌 원본 이미지 (2초간 유지) */
+    /* 1. 닫힌 원본 이미지 (MERRY CHRISTMAS 문구 안 잘리게 contain/fit 처리) */
     .bg-closed {
       position: absolute;
       top: 0;
@@ -45,8 +48,9 @@
       width: 100%;
       height: 100%;
       background: url('envelope_close.jpg') no-repeat center center;
-      background-size: cover;
-      z-index: 4;
+      background-size: contain;
+      background-color: #620c17;
+      z-index: 5;
       transition: opacity 0.8s ease-in-out;
     }
 
@@ -58,42 +62,29 @@
       width: 100%;
       height: 100%;
       background: url('envelope_open.png') no-repeat center center;
-      background-size: cover;
+      background-size: contain;
+      background-color: #620c17;
       z-index: 1;
     }
 
-    /* 3. 순백색 편지지 (2/4 지점 상승) */
+    /* 3. 편지지 (봉투 안에서 전체가 밖으로 완전히 끌어올려지도록 좌표 수정) */
     .letter {
       position: absolute;
-      bottom: 25px;
-      left: 8%;
-      width: 84%;
-      height: 440px;
+      top: 30px;
+      left: 5%;
+      width: 90%;
+      height: 550px;
       background-color: #ffffff;
-      border-radius: 4px;
-      padding: 24px 18px;
+      border-radius: 10px;
+      padding: 24px 20px;
       box-sizing: border-box;
-      box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
-      transform: translateY(220px);
-      transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+      transform: translateY(420px);
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 2;
     }
 
-    /* 편지 하단을 가려주는 봉투 전면 마스크 */
-    .pocket-mask {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 330px;
-      background: url('envelope_open.png') no-repeat center bottom;
-      background-size: cover;
-      clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 100%, 0 100%);
-      z-index: 3;
-      pointer-events: none;
-    }
-
-    /* 2초 후 동작 애니메이션 */
+    /* 2초 후 동작 애니메이션: 편지지가 봉투 밖으로 쑥 올라옴 */
     .envelope-container.open .bg-closed {
       opacity: 0;
       pointer-events: none;
@@ -104,12 +95,91 @@
 
     /* 봉인 시 역동작 */
     .envelope-container.sealed .letter {
-      transform: translateY(220px) !important;
+      transform: translateY(420px) !important;
       transition: transform 1s ease-in-out !important;
     }
     .envelope-container.sealed .bg-closed {
       opacity: 1 !important;
       transition: opacity 0.8s ease-in-out 0.6s !important;
+    }
+
+    /* 입력 폼 스타일링 */
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .to-label {
+      font-family: Georgia, serif;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--burgundy);
+      display: inline-block;
+      margin-right: 6px;
+    }
+    input.input-to {
+      border: none;
+      border-bottom: 2px solid #ddd;
+      background: transparent;
+      font-size: 15px;
+      padding: 4px;
+      width: 75%;
+      outline: none;
+    }
+    input.input-to:focus {
+      border-bottom-color: var(--burgundy);
+    }
+    textarea.input-msg {
+      width: 100%;
+      height: 140px;
+      border: 1px solid #e0d8cc;
+      background-color: #faf7f2;
+      border-radius: 8px;
+      padding: 12px;
+      box-sizing: border-box;
+      font-size: 13px;
+      line-height: 1.6;
+      resize: none;
+      outline: none;
+    }
+    textarea.input-msg:focus {
+      border-color: var(--burgundy);
+      background-color: #fff;
+    }
+    .char-count {
+      text-align: right;
+      font-size: 11px;
+      color: #888;
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    input.input-pin {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 13px;
+      box-sizing: border-box;
+      outline: none;
+    }
+    select.select-gift {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 12px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+    button.btn-submit {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--burgundy);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(98, 12, 23, 0.3);
     }
 
     /* 최종 완료 화면 */
@@ -120,7 +190,7 @@
       width: 100%;
       height: 100%;
       background: radial-gradient(circle at 50% 50%, #4a0810, #220205);
-      border-radius: 12px;
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -138,7 +208,6 @@
       opacity: 1;
       pointer-events: auto;
     }
-
     .result-screen .date-notice {
       font-size: 14px;
       color: #e2d4c0;
@@ -147,97 +216,26 @@
     }
     .result-screen h1.main-title {
       font-family: "Didot", "Bodoni MT", Georgia, serif;
-      font-size: 26px;
+      font-size: 28px;
       letter-spacing: 3px;
       color: var(--gold-light);
       margin: 0 0 8px 0;
     }
     .result-screen p.sub-title {
       font-family: Georgia, serif;
-      font-size: 13px;
+      font-size: 14px;
       letter-spacing: 2px;
       color: var(--gold-accent);
       margin: 0 0 35px 0;
       font-style: italic;
     }
-
     .btn-share {
       background-color: #06c755;
       color: white;
       border: none;
-      padding: 12px 20px;
+      padding: 14px 24px;
       border-radius: 8px;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .form-group {
-      margin-bottom: 9px;
-    }
-    .to-label {
-      font-family: Georgia, serif;
-      font-size: 18px;
-      font-weight: bold;
-      color: var(--burgundy);
-      display: inline-block;
-      margin-right: 4px;
-    }
-    input.input-to {
-      border: none;
-      border-bottom: 1px solid #ccc;
-      background: transparent;
       font-size: 14px;
-      padding: 3px;
-      width: 75%;
-      outline: none;
-    }
-    textarea.input-msg {
-      width: 100%;
-      height: 85px;
-      border: 1px solid #e0d8cc;
-      background-color: #fff;
-      border-radius: 6px;
-      padding: 8px;
-      box-sizing: border-box;
-      font-size: 12px;
-      line-height: 1.45;
-      resize: none;
-      outline: none;
-    }
-    .char-count {
-      text-align: right;
-      font-size: 10px;
-      color: #888;
-      margin-top: 2px;
-      margin-bottom: 4px;
-    }
-    input.input-pin {
-      width: 100%;
-      padding: 7px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 12px;
-      box-sizing: border-box;
-      outline: none;
-    }
-    select.select-gift {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 11px;
-      margin-bottom: 8px;
-      background: #fff;
-    }
-    button.btn-submit {
-      width: 100%;
-      padding: 11px;
-      background-color: var(--burgundy);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 13px;
       font-weight: bold;
       cursor: pointer;
     }
@@ -276,8 +274,6 @@
 
       <button class="btn-submit" onclick="submitLetter()">メッセージカードを封印して贈る</button>
     </div>
-
-    <div class="pocket-mask"></div>
 
     <div class="result-screen" id="resultScreen">
       <div class="date-notice">12月24日にメッセージが届きます</div>
