@@ -162,7 +162,7 @@
       overflow-y: auto;
     }
     .lock-box { background: #faf7f2; padding: 20px; border-radius: 12px; border: 1px solid #e0d8cc; margin-top: 15px; }
-    .store-info { margin-top: 10px; font-size: 11px; color: #666; background: #faf7f2; padding: 10px; border-radius: 6px; border: 1px solid #eee; text-align: left; }
+    .store-info { margin-top: 8px; font-size: 11px; color: #666; background: #faf7f2; padding: 8px; border-radius: 6px; border: 1px solid #eee; text-align: left; }
     .maps-btn { display: inline-block; margin-top: 4px; color: var(--burgundy); font-weight: bold; text-decoration: none; }
     .from-signature {
       text-align: right;
@@ -170,7 +170,49 @@
       font-size: 15px;
       font-weight: bold;
       color: var(--burgundy);
-      margin-top: 8px;
+      margin-top: 6px;
+    }
+
+    /* 티켓 및 스태프 사용완료 버튼 디자인 */
+    .ticket-card {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #fdfaf6;
+      border: 2px dashed var(--gold-accent);
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: inset 0 0 10px rgba(197, 160, 89, 0.1);
+    }
+    .ticket-title {
+      color: var(--burgundy);
+      font-weight: bold;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+    .ticket-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 3px;
+    }
+    .btn-staff-use {
+      margin-top: 6px;
+      padding: 5px 12px;
+      background-color: #555;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .used-badge {
+      display: none;
+      margin-top: 6px;
+      padding: 4px 8px;
+      background-color: #d9534f;
+      color: #fff;
+      font-weight: bold;
+      font-size: 11px;
+      border-radius: 4px;
     }
   </style>
 </head>
@@ -247,7 +289,7 @@
     <!-- 4. 받는 사람 전용 수신 화면 -->
     <div class="letter" id="receiverLetter" style="display:none;">
       <div class="receive-view">
-        <h3 style="color:var(--burgundy); margin:4px 0 12px 0;">To. <span id="recTo"></span></h3>
+        <h3 style="color:var(--burgundy); margin:4px 0 10px 0;">To. <span id="recTo"></span></h3>
 
         <div id="lockSection" class="lock-box">
           <p style="font-size:13px; color:#555; margin-bottom:12px;">12月24日開封用 暗証番号を入力してください</p>
@@ -258,8 +300,19 @@
 
         <div id="contentSection" style="display:none; text-align:left; flex:1; flex-direction:column; justify-content:space-between;">
           <div>
-            <div style="background:#faf7f2; padding:14px 16px; border-radius:8px; border:1px solid #e0d8cc; font-size:13.5px; line-height:1.6; white-space:pre-wrap;" id="recMsg"></div>
-            <div style="margin-top:8px; padding:10px; background:#fff3f4; border-radius:8px; text-align:center; color:var(--burgundy); font-weight:bold; font-size:13px; display:none;" id="recGiftTitle"></div>
+            <div style="background:#faf7f2; padding:12px 14px; border-radius:8px; border:1px solid #e0d8cc; font-size:13px; line-height:1.5; white-space:pre-wrap;" id="recMsg"></div>
+            
+            <!-- 실물 티켓 및 스태프 사용완료 버튼 -->
+            <div class="ticket-card" id="recGiftTitle" style="display:none;">
+              <div class="ticket-title" id="recGiftName">🎟️ カヌレ1個 交換チケット</div>
+              <div class="ticket-sub">※店頭ご注文時に本画面をスタッフへご提示ください</div>
+              
+              <!-- 스태프 확인 버튼 -->
+              <button class="btn-staff-use" id="staffUseBtn" onclick="useTicketByStaff()">[店舗スタッフ確認] 使用済みにする</button>
+              
+              <!-- 사용 완료 처리 상태 표시 -->
+              <div class="used-badge" id="usedBadge">✓ 使用済み (<span id="usedTime"></span>)</div>
+            </div>
           </div>
 
           <div class="store-info" id="storeInfoBox" style="display:none;">
@@ -280,21 +333,20 @@
 
 <script>
   let generatedShareUrl = '';
+  let currentCardData = null;
 
   window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     
-    // 수신 모드 (상대방이 링크를 눌러서 온 경우)
     if (urlParams.has('data')) {
       setupReceiverMode(urlParams.get('data'));
       return;
     }
 
-    // Square 결제 직후 되돌아온 경우 (로컬 스토리지 데이터 확인)
     const pendingData = localStorage.getItem('pending_xmas_card');
     if (pendingData) {
       generatedShareUrl = pendingData;
-      localStorage.removeItem('pending_xmas_card'); // 데이터 사용 후 복원 방지 삭제
+      localStorage.removeItem('pending_xmas_card');
 
       const container = document.getElementById('envelopeContainer');
       container.classList.add('sealed');
@@ -302,7 +354,6 @@
       return;
     }
 
-    // 기본 보냄 모드 (새로운 작성자)
     setTimeout(() => {
       document.getElementById('envelopeContainer').classList.add('open');
     }, 1500);
@@ -347,14 +398,12 @@
     const baseUrl = window.location.origin + window.location.pathname;
     generatedShareUrl = `${baseUrl}?data=${payload}`;
 
-    // Square 결제 전 브라우저에 완성 링크 저장
     if (gift === 'cannele') {
       localStorage.setItem('pending_xmas_card', generatedShareUrl);
       window.location.href = 'https://square.link/u/4U1MkTXp';
       return;
     }
 
-    // 무료 옵션일 경우 바로 봉인 오버레이 띄우기
     const container = document.getElementById('envelopeContainer');
     container.classList.remove('open');
     container.classList.add('sealed');
@@ -376,6 +425,7 @@
 
   function setupReceiverMode(encodedData) {
     try {
+      currentCardData = encodedData;
       const data = JSON.parse(decodeURIComponent(atob(encodedData)));
       document.getElementById('senderLetter').style.display = 'none';
       const recLetter = document.getElementById('receiverLetter');
@@ -399,23 +449,50 @@
         document.getElementById('recMsg').innerText = data.m;
         
         const giftTitleBox = document.getElementById('recGiftTitle');
+        const giftName = document.getElementById('recGiftName');
         const storeBox = document.getElementById('storeInfoBox');
 
         if (data.g === 'cannele') {
           giftTitleBox.style.display = 'block';
-          giftTitleBox.innerText = '🎁 カヌレ1個 ギフトチケット';
+          giftName.innerText = '🎟️ カヌレ1個 交換チケット';
           storeBox.style.display = 'block';
         } else if (data.g === 'set') {
           giftTitleBox.style.display = 'block';
-          giftTitleBox.innerText = '🎁 カヌレ＆紅茶セット チケット';
+          giftName.innerText = '🎟️ カヌレ＆紅茶セット 交換チケット';
           storeBox.style.display = 'block';
         } else {
           giftTitleBox.style.display = 'none';
           storeBox.style.display = 'none';
         }
+
+        // 사용 완료 상태 확인 (로컬 스토리지에 기록된 데이터 확인)
+        const usedStatus = localStorage.getItem('used_ticket_' + currentCardData);
+        if (usedStatus) {
+          document.getElementById('staffUseBtn').style.display = 'none';
+          const badge = document.getElementById('usedBadge');
+          badge.style.display = 'inline-block';
+          document.getElementById('usedTime').innerText = usedStatus;
+        }
       };
     } catch(e) {
       alert('有効なカードデータではありません。');
+    }
+  }
+
+  // 매장 스태프 전용 사용완료 처리 함수
+  function useTicketByStaff() {
+    if (confirm('【店舗スタッフ確認】\nこのチケットを使用済みにしますか？\n（※一度使用済みにすると元に戻せません）')) {
+      const now = new Date();
+      const timeStr = `${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      
+      localStorage.setItem('used_ticket_' + currentCardData, timeStr);
+      
+      document.getElementById('staffUseBtn').style.display = 'none';
+      const badge = document.getElementById('usedBadge');
+      badge.style.display = 'inline-block';
+      document.getElementById('usedTime').innerText = timeStr;
+      
+      alert('チケットを「使用済み」に処理しました。');
     }
   }
 </script>
