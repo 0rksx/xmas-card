@@ -15,7 +15,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg') repeat center center;
+      background: url('tree_bg.jpg?v=2') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -31,7 +31,7 @@
       box-sizing: border-box;
     }
 
-    /* 노란색 체크 영역: 붉은 종이 배경(paper_red.jpg) 적용 */
+    /* 붉은 종이 배경 (캐시 방지 파라미터 v=2 추가) */
     .envelope-container {
       position: relative;
       width: 100%;
@@ -39,14 +39,14 @@
       overflow: hidden;
       border-radius: 20px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.5);
-      background: url('paper_red.jpg') repeat center center;
-      background-size: cover;
+      background: url('paper_red.jpg?v=2') repeat center center !important;
+      background-size: cover !important;
     }
 
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg') no-repeat center center;
+      background: url('envelope_close.jpg?v=2') no-repeat center center;
       background-size: contain;
       z-index: 5;
       transition: opacity 0.8s ease-in-out;
@@ -55,26 +55,24 @@
     .bg-final {
       position: absolute;
       top: -100%; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg') no-repeat center center;
+      background: url('envelope_final.jpg?v=2') no-repeat center center;
       background-size: contain;
       z-index: 5;
       transition: top 1.2s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    /* 열린 봉투 오버레이 */
     .bg-opened {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_open.png') no-repeat center center;
+      background: url('envelope_open.png?v=2') no-repeat center center;
       background-size: cover;
       z-index: 1;
     }
 
-    /* 편지지: 상아색 종이 배경(paper_ivory.jpg) 적용 및 너비 확장으로 안쪽 회색 이미지 가리기 */
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg') repeat center center;
+      background: url('paper_ivory.jpg?v=2') repeat center center;
       background-size: cover;
       border-radius: 0;
       padding: 20px 24px 12px 24px;
