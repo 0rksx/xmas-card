@@ -31,6 +31,7 @@
       box-sizing: border-box;
     }
 
+    /* 노란색 체크 영역: 붉은 종이 배경(paper_red.jpg) 적용 */
     .envelope-container {
       position: relative;
       width: 100%;
@@ -42,12 +43,11 @@
       background-size: cover;
     }
 
-    /* 첫 장 봉투 이미지가 모바일에서도 절대로 잘리지 않도록 contain 설정 */
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: #4a060e url('envelope_close.jpg') no-repeat center center;
-      background-size: contain; /* 잘림 방지 핵심 */
+      background: url('envelope_close.jpg') no-repeat center center;
+      background-size: contain;
       z-index: 5;
       transition: opacity 0.8s ease-in-out;
     }
@@ -55,12 +55,13 @@
     .bg-final {
       position: absolute;
       top: -100%; left: 0; width: 100%; height: 100%;
-      background: #4a060e url('envelope_final.jpg') no-repeat center center;
+      background: url('envelope_final.jpg') no-repeat center center;
       background-size: contain;
       z-index: 5;
       transition: top 1.2s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
+    /* 열린 봉투 오버레이 */
     .bg-opened {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -69,18 +70,19 @@
       z-index: 1;
     }
 
+    /* 편지지: 상아색 종이 배경(paper_ivory.jpg) 적용 및 너비 확장으로 안쪽 회색 이미지 가리기 */
     .letter {
       position: absolute;
-      top: 25px; left: 5%; width: 90%; height: 470px;
+      top: 20px; left: 3%; width: 94%; height: 480px;
       background: url('paper_ivory.jpg') repeat center center;
       background-size: cover;
       border-radius: 0;
-      padding: 20px 28px 12px 28px;
+      padding: 20px 24px 12px 24px;
       box-sizing: border-box;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       transform: translateY(380px);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 2;
+      z-index: 3;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -92,9 +94,9 @@
     .envelope-container.sealed .letter { transform: translateY(380px) !important; transition: transform 1s ease-in-out !important; }
     .envelope-container.sealed .bg-final { top: 0 !important; }
 
-    .form-row { display: flex; gap: 24px; }
+    .form-row { display: flex; gap: 20px; }
     .form-col { flex: 1; display: flex; flex-direction: column; }
-    .form-group { margin-bottom: 10px; }
+    .form-group { margin-bottom: 8px; }
     
     .to-label {
       font-family: Georgia, "Times New Roman", serif;
@@ -123,7 +125,7 @@
       width: 100%;
       height: 180px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.7);
+      background-color: rgba(255, 255, 255, 0.65);
       border-radius: 4px;
       padding: 12px;
       box-sizing: border-box;
@@ -137,14 +139,14 @@
     .char-count { text-align: right; font-size: 11px; color: #777; margin-top: 3px; }
     
     .right-col-inner {
-      margin-top: 40px;
+      margin-top: 36px;
     }
 
     input.input-pin {
       width: 100%;
       padding: 11px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.7);
+      background-color: rgba(255, 255, 255, 0.65);
       border-radius: 4px;
       font-size: 13px;
       color: #222222;
@@ -157,7 +159,7 @@
       width: 100%;
       padding: 11px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(255, 255, 255, 0.75);
       border-radius: 4px;
       font-size: 12px;
       color: #222222;
@@ -276,7 +278,6 @@
       border-radius: 4px;
     }
 
-    /* 📱 모바일 완전 최적화 미디어 쿼리 */
     @media (max-width: 768px) {
       .container {
         padding: 6px;
@@ -284,14 +285,13 @@
       .envelope-container {
         height: 520px;
         border-radius: 14px;
-        background-size: cover;
       }
       .letter {
-        top: 12px;
-        left: 3%;
-        width: 94%;
-        height: 490px;
-        padding: 14px 16px 10px 16px;
+        top: 10px;
+        left: 2%;
+        width: 96%;
+        height: 500px;
+        padding: 14px 14px 10px 14px;
       }
       .form-row {
         flex-direction: column;
