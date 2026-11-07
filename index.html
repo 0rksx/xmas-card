@@ -14,7 +14,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "メイリオ", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", "メイリオ", sans-serif;
       background-color: var(--bg-color);
       display: flex;
       justify-content: center;
@@ -87,13 +87,14 @@
       transform: translateY(0);
     }
 
+    /* 봉인 애니메이션: 편지가 봉투 안으로 쏙 들어가고 닫힌 봉투가 덮임 */
     .envelope-container.sealed .letter {
-      transform: translateY(320px) !important;
+      transform: translateY(340px) !important;
       transition: transform 1s ease-in-out !important;
     }
     .envelope-container.sealed .bg-closed {
       opacity: 1 !important;
-      transition: opacity 0.8s ease-in-out 0.6s !important;
+      transition: opacity 0.8s ease-in-out 0.5s !important;
     }
 
     .form-row {
@@ -124,6 +125,7 @@
       padding: 4px;
       width: 80%;
       outline: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Hiragino Sans", sans-serif;
     }
     input.input-to:focus {
       border-bottom-color: var(--burgundy);
@@ -136,10 +138,11 @@
       border-radius: 8px;
       padding: 12px;
       box-sizing: border-box;
-      font-size: 13px;
+      font-size: 13.5px;
       line-height: 1.6;
       resize: none;
       outline: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
     }
     textarea.input-msg:focus {
       border-color: var(--burgundy);
@@ -183,6 +186,74 @@
       box-shadow: 0 4px 12px rgba(98, 12, 23, 0.3);
     }
 
+    /* 프리뷰 모달 팝업 */
+    .preview-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .preview-modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .preview-content {
+      background: #fff;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .preview-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--burgundy);
+      margin-bottom: 16px;
+    }
+    .preview-card {
+      background: #faf7f2;
+      border: 1px solid #e0d8cc;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: left;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+    .preview-btn-group {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-edit {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ccc;
+      background: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-confirm {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: var(--burgundy);
+      color: #fff;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* 완료 화면 */
     .result-screen {
       position: absolute;
       top: 0;
@@ -257,8 +328,8 @@
             <input type="text" id="toName" class="input-to" placeholder="お名前">
           </div>
           <div class="form-group" style="margin-bottom: 0;">
-            <textarea id="message" class="input-msg" maxlength="50" placeholder="12月24日に開くメッセージを入力してください。(50文字以内)" oninput="updateCharCount(this)"></textarea>
-            <div class="char-count"><span id="currentCount">0</span> / 50文字</div>
+            <textarea id="message" class="input-msg" maxlength="100" placeholder="12月24日に開くメッセージを入力してください。(100文字以内)" oninput="updateCharCount(this)"></textarea>
+            <div class="char-count"><span id="currentCount">0</span> / 100文字</div>
           </div>
         </div>
 
@@ -273,7 +344,23 @@
               <option value="set">カヌレ＆紅茶セット チケット (1,000円)</option>
             </select>
           </div>
-          <button class="btn-submit" onclick="submitLetter()">メッセージカードを封印して贈る</button>
+          <button class="btn-submit" onclick="openPreview()">メッセージカードを封印して贈る</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 미리보기 팝업 모달 -->
+    <div class="preview-modal" id="previewModal">
+      <div class="preview-content">
+        <div class="preview-title">内容の確認 (最終プレビュー)</div>
+        <div class="preview-card">
+          <p style="margin: 0 0 8px 0;"><strong>To.</strong> <span id="prevTo"></span></p>
+          <p style="margin: 0 0 12px 0; white-space: pre-wrap; color: #444;" id="prevMsg"></p>
+          <p style="margin: 0; font-size: 11px; color: #888;">ギフト: <span id="prevGift"></span></p>
+        </div>
+        <div class="preview-btn-group">
+          <button class="btn-edit" onclick="closePreview()">修正する</button>
+          <button class="btn-confirm" onclick="confirmAndSubmit()">この内容で贈る</button>
         </div>
       </div>
     </div>
@@ -290,7 +377,6 @@
 
 <script>
   window.addEventListener('DOMContentLoaded', () => {
-    // ページ読み込み完了時、URLパラメータに ?status=success があれば完了画面を直接表示
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('status') === 'success') {
       const container = document.getElementById('envelopeContainer');
@@ -308,10 +394,13 @@
     document.getElementById('currentCount').innerText = textarea.value.length;
   }
 
-  function submitLetter() {
+  // 프리뷰 팝업 열기
+  function openPreview() {
+    const toName = document.getElementById('toName').value;
     const msg = document.getElementById('message').value;
     const pin = document.getElementById('pin').value;
-    const gift = document.getElementById('giftOption').value;
+    const giftSelect = document.getElementById('giftOption');
+    const giftText = giftSelect.options[giftSelect.selectedIndex].text;
 
     if (!msg) {
       alert('メッセージを入力してください。');
@@ -322,22 +411,34 @@
       return;
     }
 
-    // --- Square 결제 연동 (Square決済連携) ---
-    if (gift === 'cannele') {
-      // 500엔 Square 결제 페이지로 이동 (500円Square決済ページヘ遷移)
-      window.location.href = 'https://square.link/u/4U1MkTXp';
-      return;
-    } else if (gift === 'set') {
-      alert('1,000円の決済リンクは準備中です。500円ギフトをお試しください。');
-      return;
-    }
+    document.getElementById('prevTo').innerText = toName || 'お名前なし';
+    document.getElementById('prevMsg').innerText = msg;
+    document.getElementById('prevGift').innerText = giftText;
 
-    // 無料選択時のアニメーション
+    document.getElementById('previewModal').classList.add('show');
+  }
+
+  function closePreview() {
+    document.getElementById('previewModal').classList.remove('show');
+  }
+
+  // 최종 확인 후 봉인 애니메이션 및 결제 진행
+  function confirmAndSubmit() {
+    closePreview();
+    const gift = document.getElementById('giftOption').value;
+
     const container = document.getElementById('envelopeContainer');
     container.classList.remove('open');
     container.classList.add('sealed');
 
     setTimeout(() => {
+      if (gift === 'cannele') {
+        window.location.href = 'https://square.link/u/4U1MkTXp';
+        return;
+      } else if (gift === 'set') {
+        alert('1,000円の決済リンクは準備中です。500円ギフトをお試しください。');
+        return;
+      }
       document.getElementById('resultScreen').classList.add('show');
     }, 1600);
   }
