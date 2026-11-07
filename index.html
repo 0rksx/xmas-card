@@ -42,11 +42,12 @@
       background-size: cover;
     }
 
+    /* 첫 장 봉투 이미지가 모바일에서도 절대로 잘리지 않도록 contain 설정 */
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg') no-repeat center center;
-      background-size: cover;
+      background: #4a060e url('envelope_close.jpg') no-repeat center center;
+      background-size: contain; /* 잘림 방지 핵심 */
       z-index: 5;
       transition: opacity 0.8s ease-in-out;
     }
@@ -54,8 +55,8 @@
     .bg-final {
       position: absolute;
       top: -100%; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg') no-repeat center center;
-      background-size: cover;
+      background: #4a060e url('envelope_final.jpg') no-repeat center center;
+      background-size: contain;
       z-index: 5;
       transition: top 1.2s cubic-bezier(0.25, 1, 0.5, 1);
     }
@@ -122,7 +123,7 @@
       width: 100%;
       height: 180px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.65);
+      background-color: rgba(255, 255, 255, 0.7);
       border-radius: 4px;
       padding: 12px;
       box-sizing: border-box;
@@ -143,7 +144,7 @@
       width: 100%;
       padding: 11px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.65);
+      background-color: rgba(255, 255, 255, 0.7);
       border-radius: 4px;
       font-size: 13px;
       color: #222222;
@@ -156,7 +157,7 @@
       width: 100%;
       padding: 11px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.75);
+      background-color: rgba(255, 255, 255, 0.8);
       border-radius: 4px;
       font-size: 12px;
       color: #222222;
@@ -221,8 +222,8 @@
       box-sizing: border-box;
       overflow-y: auto;
     }
-    .lock-box { background: rgba(255, 255, 255, 0.85); padding: 20px; border-radius: 8px; border: 1px solid #e0d8cc; margin-top: 15px; }
-    .store-info { margin-top: 8px; font-size: 11px; color: #555; background: rgba(255, 255, 255, 0.85); padding: 8px; border-radius: 6px; border: 1px solid #eee; text-align: left; }
+    .lock-box { background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 8px; border: 1px solid #e0d8cc; margin-top: 15px; }
+    .store-info { margin-top: 8px; font-size: 11px; color: #555; background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; border: 1px solid #eee; text-align: left; }
     .maps-btn { display: inline-block; margin-top: 4px; color: var(--burgundy); font-weight: bold; text-decoration: none; }
     
     .name-text {
@@ -238,7 +239,7 @@
     .ticket-card {
       margin-top: 10px;
       padding: 10px 12px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border: 2px dashed var(--gold-accent);
       border-radius: 8px;
       text-align: center;
@@ -275,37 +276,39 @@
       border-radius: 4px;
     }
 
+    /* 📱 모바일 완전 최적화 미디어 쿼리 */
     @media (max-width: 768px) {
       .container {
-        padding: 8px;
+        padding: 6px;
       }
       .envelope-container {
-        height: 560px;
+        height: 520px;
         border-radius: 14px;
+        background-size: cover;
       }
       .letter {
-        top: 15px;
-        left: 4%;
-        width: 92%;
-        height: 520px;
-        padding: 16px 18px 10px 18px;
+        top: 12px;
+        left: 3%;
+        width: 94%;
+        height: 490px;
+        padding: 14px 16px 10px 16px;
       }
       .form-row {
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
       }
       .right-col-inner {
-        margin-top: 6px;
+        margin-top: 4px;
       }
       textarea.input-msg {
-        height: 140px;
+        height: 120px;
       }
       input.input-pin, select.select-gift {
-        padding: 9px;
-        margin-bottom: 8px;
+        padding: 8px;
+        margin-bottom: 6px;
       }
       button.btn-submit {
-        padding: 8px 2px;
+        padding: 6px 2px;
       }
     }
   </style>
@@ -394,7 +397,7 @@
 
         <div id="contentSection" style="display:none; text-align:left; flex:1; flex-direction:column; justify-content:space-between;">
           <div>
-            <div style="background:rgba(255,255,255,0.75); padding:12px 14px; border-radius:4px; border:1px solid #e0d8cc; font-size:13px; color:#222; line-height:1.5; white-space:pre-wrap;" id="recMsg"></div>
+            <div style="background:rgba(255,255,255,0.85); padding:12px 14px; border-radius:4px; border:1px solid #e0d8cc; font-size:13px; color:#222; line-height:1.5; white-space:pre-wrap;" id="recMsg"></div>
             
             <div class="ticket-card" id="recGiftTitle" style="display:none;">
               <div class="ticket-title" id="recGiftName">🎟️ カヌレ1個 交換チケット</div>
@@ -425,7 +428,6 @@
   let generatedShareUrl = '';
   let currentCardData = null;
 
-  // 초단축 인코딩 알고리즘
   function compressBtoa(str) {
     return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
       return String.fromCharCode('0x' + p1);
@@ -447,7 +449,6 @@
   window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     
-    // 신규 단축 키 'd' 또는 기존 키 'data' 처리
     const rawData = urlParams.get('d') || urlParams.get('data');
     if (rawData) {
       setupReceiverMode(rawData);
@@ -505,7 +506,6 @@
     const pin = document.getElementById('pin').value;
     const gift = document.getElementById('giftOption').value;
 
-    // 객체 데이터 초단축 인코딩 (키 명칭 t, f, m, p, g)
     const payload = compressBtoa(JSON.stringify({ t: toName, f: fromName, m: msg, p: pin, g: gift }));
     const baseUrl = window.location.origin + window.location.pathname;
     generatedShareUrl = `${baseUrl}?d=${payload}`;
