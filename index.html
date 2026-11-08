@@ -10,6 +10,9 @@
   <meta property="og:description" content="特別なクリスマスカードが届きました。">
   <meta property="og:type" content="website">
 
+  <!-- URL 초강력 압축 라이브러리 (LZ-String) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+
   <style>
     :root {
       --bg-color: #f6f2ec;
@@ -21,7 +24,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg?v=14') repeat center center;
+      background: url('tree_bg.jpg?v=15') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -52,7 +55,7 @@
     .envelope-container.open {
       height: 520px;
       padding-bottom: 0;
-      background: url('paper_red.jpg?v=14') repeat center center;
+      background: url('paper_red.jpg?v=15') repeat center center;
       background-size: cover;
     }
 
@@ -65,7 +68,7 @@
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg?v=14') no-repeat center center;
+      background: url('envelope_close.jpg?v=15') no-repeat center center;
       background-size: cover;
       z-index: 5;
       transition: opacity 0.5s ease;
@@ -74,7 +77,7 @@
     .bg-final {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg?v=14') no-repeat center center;
+      background: url('envelope_final.jpg?v=15') no-repeat center center;
       background-size: cover;
       z-index: 5;
       transform: translateY(-100%);
@@ -84,7 +87,7 @@
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg?v=14') repeat center center;
+      background: url('paper_ivory.jpg?v=15') repeat center center;
       background-size: cover;
       border-radius: 6px;
       padding: 20px 24px 12px 24px;
@@ -410,7 +413,7 @@
       <button class="btn-share" onclick="copyShareLink()">LINEで相手に贈る (リンクコピー)</button>
     </div>
 
-    <!-- 4. 수신 화면 (2줄 문구 분리 적용) -->
+    <!-- 4. 수신 화면 -->
     <div class="letter" id="receiverLetter" style="display:none;">
       <div class="receive-view">
         <h3 style="color:var(--burgundy); margin:4px 0 10px 0; font-family:Georgia, serif; font-style:italic;">To. <span id="recTo" class="name-text" style="font-family:sans-serif; font-style:normal;"></span></h3>
@@ -463,22 +466,27 @@
   let generatedShareUrl = '';
   let currentCardData = null;
 
-  /* URL 압축 최적화 (링크 길이 단축) */
-  function compressBtoa(str) {
-    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
-      return String.fromCharCode('0x' + p1);
-    })).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  /* LZ-String 알고리즘으로 링크 길이 대폭 단축 */
+  function encodeData(dataObj) {
+    const jsonStr = JSON.stringify(dataObj);
+    return LZString.compressToEncodedURIComponent(jsonStr);
   }
 
-  function decompressAtob(str) {
+  function decodeData(compressedStr) {
     try {
-      let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+      // 신규 LZ-String 해독
+      const decompressed = LZString.decompressFromEncodedURIComponent(compressedStr);
+      if (decompressed) return JSON.parse(decompressed);
+      
+      // 구버전 btoa 방식과의 하위 호환성 유지
+      let b64 = compressedStr.replace(/-/g, '+').replace(/_/g, '/');
       while (b64.length % 4) b64 += '=';
-      return decodeURIComponent(Array.prototype.map.call(atob(b64), function(c) {
+      const rawStr = decodeURIComponent(Array.prototype.map.call(atob(b64), function(c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       }).join(''));
+      return JSON.parse(rawStr);
     } catch(e) {
-      return decodeURIComponent(atob(str));
+      return null;
     }
   }
 
@@ -551,8 +559,8 @@
     const pin = document.getElementById('pin').value;
     const gift = document.getElementById('giftOption').value;
 
-    /* 단축 배열 포맷 사용 ([To, From, Msg, Pin, Gift]) */
-    const payload = compressBtoa(JSON.stringify([toName, fromName, msg, pin, gift]));
+    // 초단축 배열 구조: [To, From, Msg, Pin, Gift]
+    const payload = encodeData([toName, fromName, msg, pin, gift]);
     const baseUrl = window.location.origin + window.location.pathname;
     generatedShareUrl = `${baseUrl}?d=${payload}`;
 
@@ -584,9 +592,13 @@
   function setupReceiverMode(encodedData) {
     try {
       currentCardData = encodedData;
-      const raw = JSON.parse(decompressAtob(encodedData));
+      const raw = decodeData(encodedData);
       
-      // 하위 호환성 (기존 객체 포맷 및 단축 배열 포맷 호환)
+      if (!raw) {
+        showCustomAlert('有効なカードデータではありません。');
+        return;
+      }
+
       const data = Array.isArray(raw) 
         ? { t: raw[0], f: raw[1], m: raw[2], p: raw[3], g: raw[4] }
         : raw;
