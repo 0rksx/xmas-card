@@ -15,7 +15,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg?v=3') repeat center center;
+      background: url('tree_bg.jpg?v=4') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -31,73 +31,97 @@
       box-sizing: border-box;
     }
 
-    /* 붉은 종이 메인 봉투 프레임 */
     .envelope-container {
       position: relative;
       width: 100%;
       height: 520px;
-      overflow: hidden; /* 흰 종이 삐져나옴 완전 방지 */
+      overflow: hidden;
       border-radius: 20px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.5);
-      background: url('paper_red.jpg?v=3') repeat center center;
+      background: url('paper_red.jpg?v=4') repeat center center;
       background-size: cover;
     }
 
-    /* 첫 장 봉투 (잘림 방지 및 하드웨어 가속 전환) */
+    /* 1. 닫힌 봉투 메인 영역 */
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg?v=3') no-repeat center center;
-      background-size: contain; /* 윗부분/밑부분 잘림 방지 */
+      background: url('envelope_close.jpg?v=4') no-repeat center bottom;
+      background-size: cover;
       z-index: 5;
-      will-change: opacity, transform;
-      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: opacity 0.6s ease-in-out;
     }
 
-    /* 봉인 완료 덮개 (부드러운 슬라이드 60fps) */
+    /* 2. 잘려있던 윗봉투 꼭짓점을 완벽하게 보정하는 삼각형 덮개 */
+    .envelope-top-flap {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 180px;
+      background: url('paper_red.jpg?v=4') repeat center center;
+      background-size: cover;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      z-index: 6;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: opacity 0.6s ease-in-out;
+    }
+
+    /* 3. 봉인 완료 덮개 (슬라이드 내려옴) */
     .bg-final {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg?v=3') no-repeat center center;
-      background-size: contain;
+      background: url('envelope_final.jpg?v=4') no-repeat center center;
+      background-size: cover;
       z-index: 5;
       transform: translateY(-100%);
-      will-change: transform;
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .bg-opened {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_open.png?v=3') no-repeat center center;
+      background: url('envelope_open.png?v=4') no-repeat center center;
       background-size: cover;
       z-index: 1;
     }
 
-    /* 편지지 (초기 상태에서 삐져나오지 않도록 translateY(105%) 처리) */
+    /* 4. 편지지 (뒤 봉투 문구 잔상 완전 제거 및 깔끔한 상아색) */
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg?v=3') repeat center center;
+      background: url('paper_ivory.jpg?v=4') repeat center center;
       background-size: cover;
       border-radius: 0;
       padding: 20px 24px 12px 24px;
       box-sizing: border-box;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      transform: translateY(105%); /* 하단 숨김으로 삐져나옴 해제 */
-      will-change: transform;
+      transform: translateY(105%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 3;
+      z-index: 10; /* 봉인 및 뒤쪽 레이어보다 무조건 위에 표시 */
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       overflow-y: auto;
     }
 
-    .envelope-container.open .bg-closed { opacity: 0; pointer-events: none; }
-    .envelope-container.open .letter { transform: translateY(0); }
-    .envelope-container.sealed .letter { transform: translateY(105%) !important; transition: transform 1s ease-in-out !important; }
-    .envelope-container.sealed .bg-final { transform: translateY(0) !important; }
+    /* 열렸을 때 뒤쪽 봉투 완전히 숨기기 */
+    .envelope-container.open .bg-closed,
+    .envelope-container.open .envelope-top-flap {
+      opacity: 0;
+      pointer-events: none;
+      display: none; /* 뒤쪽 MERRY CHRISTMAS 문구 완전히 소멸 */
+    }
+
+    .envelope-container.open .letter { 
+      transform: translateY(0); 
+    }
+    
+    .envelope-container.sealed .letter { 
+      transform: translateY(105%) !important; 
+      transition: transform 1s ease-in-out !important; 
+    }
+    
+    .envelope-container.sealed .bg-final { 
+      transform: translateY(0) !important; 
+    }
 
     .form-row { display: flex; gap: 20px; }
     .form-col { flex: 1; display: flex; flex-direction: column; }
@@ -130,7 +154,7 @@
       width: 100%;
       height: 180px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.65);
+      background-color: rgba(255, 255, 255, 0.7);
       border-radius: 4px;
       padding: 12px;
       box-sizing: border-box;
@@ -151,7 +175,7 @@
       width: 100%;
       padding: 11px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.65);
+      background-color: rgba(255, 255, 255, 0.7);
       border-radius: 4px;
       font-size: 13px;
       color: #222222;
@@ -164,7 +188,7 @@
       width: 100%;
       padding: 11px;
       border: 1px solid #d4ceb8;
-      background-color: rgba(255, 255, 255, 0.75);
+      background-color: rgba(255, 255, 255, 0.8);
       border-radius: 4px;
       font-size: 12px;
       color: #222222;
@@ -212,7 +236,7 @@
     .result-overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(40, 5, 10, 0.35);
-      z-index: 6; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+      z-index: 20; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
       color: #fff; text-align: center; padding: 40px 24px 30px 24px; box-sizing: border-box;
       opacity: 0; pointer-events: none; transition: opacity 0.8s ease-in-out;
     }
@@ -324,6 +348,7 @@
   <div class="envelope-container" id="envelopeContainer">
     
     <div class="bg-closed"></div>
+    <div class="envelope-top-flap"></div>
     <div class="bg-final"></div>
     <div class="bg-opened"></div>
 
