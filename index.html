@@ -15,7 +15,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg?v=6') repeat center center;
+      background: url('tree_bg.jpg?v=7') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -31,6 +31,7 @@
       box-sizing: border-box;
     }
 
+    /* 메인 봉투 전체 프레임 */
     .envelope-container {
       position: relative;
       width: 100%;
@@ -38,16 +39,16 @@
       overflow: hidden;
       border-radius: 20px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.5);
-      background: url('paper_red.jpg?v=6') repeat center center;
+      background: url('paper_red.jpg?v=7') repeat center center;
       background-size: cover;
     }
 
-    /* 첫 장 봉투 메인 레이어 */
+    /* 첫 장 봉투 - 잘림 완전 방지 (contain 적용) */
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg?v=6') no-repeat center center;
-      background-size: cover;
+      background: #4a060e url('envelope_close.jpg?v=7') no-repeat center center;
+      background-size: contain !important; /* 모바일 잘림 완벽 방지 */
       z-index: 5;
       transition: opacity 0.5s ease;
     }
@@ -56,18 +57,18 @@
     .bg-final {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg?v=6') no-repeat center center;
-      background-size: cover;
+      background: #4a060e url('envelope_final.jpg?v=7') no-repeat center center;
+      background-size: contain !important;
       z-index: 5;
       transform: translateY(-100%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* 편지 카드 (순수한 빨간 배경 위에 상아색 편지만 깔끔하게 배치) */
+    /* 편지 카드 */
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg?v=6') repeat center center;
+      background: url('paper_ivory.jpg?v=7') repeat center center;
       background-size: cover;
       border-radius: 6px;
       padding: 20px 24px 12px 24px;
@@ -82,7 +83,6 @@
       overflow-y: auto;
     }
 
-    /* 편지 열렸을 때 첫 장 봉투 완전히 소멸 */
     .envelope-container.open .bg-closed {
       opacity: 0;
       display: none;
@@ -285,19 +285,20 @@
       border-radius: 4px;
     }
 
+    /* 📱 모바일 전용 반응형 높이 보정 */
     @media (max-width: 768px) {
       .container {
-        padding: 6px;
+        padding: 4px;
       }
       .envelope-container {
-        height: 520px;
+        height: 480px; /* 모바일 세로 비율에 맞게 최적화 */
         border-radius: 14px;
       }
       .letter {
         top: 10px;
         left: 2%;
         width: 96%;
-        height: 500px;
+        height: 460px;
         padding: 14px 14px 10px 14px;
       }
       .form-row {
@@ -308,7 +309,7 @@
         margin-top: 4px;
       }
       textarea.input-msg {
-        height: 120px;
+        height: 110px;
       }
       input.input-pin, select.select-gift {
         padding: 8px;
