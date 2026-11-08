@@ -24,7 +24,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg?v=15') repeat center center;
+      background: url('tree_bg.jpg?v=16') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -55,7 +55,7 @@
     .envelope-container.open {
       height: 520px;
       padding-bottom: 0;
-      background: url('paper_red.jpg?v=15') repeat center center;
+      background: url('paper_red.jpg?v=16') repeat center center;
       background-size: cover;
     }
 
@@ -68,7 +68,7 @@
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg?v=15') no-repeat center center;
+      background: url('envelope_close.jpg?v=16') no-repeat center center;
       background-size: cover;
       z-index: 5;
       transition: opacity 0.5s ease;
@@ -77,7 +77,7 @@
     .bg-final {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg?v=15') no-repeat center center;
+      background: url('envelope_final.jpg?v=16') no-repeat center center;
       background-size: cover;
       z-index: 5;
       transform: translateY(-100%);
@@ -87,7 +87,7 @@
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg?v=15') repeat center center;
+      background: url('paper_ivory.jpg?v=16') repeat center center;
       background-size: cover;
       border-radius: 6px;
       padding: 20px 24px 12px 24px;
@@ -224,12 +224,12 @@
       display: block;
     }
 
-    .preview-modal, .custom-alert-modal {
+    .preview-modal, .custom-alert-modal, .custom-confirm-modal {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
       z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
     }
-    .preview-modal.show, .custom-alert-modal.show { opacity: 1; pointer-events: auto; }
+    .preview-modal.show, .custom-alert-modal.show, .custom-confirm-modal.show { opacity: 1; pointer-events: auto; }
     .preview-content { background: #fff; width: 90%; max-width: 400px; border-radius: 16px; padding: 24px; text-align: center; }
     .preview-card { background: #faf7f2; border: 1px solid #e0d8cc; border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 20px; font-size: 13px; color: #222; }
     .preview-btn-group { display: flex; gap: 10px; }
@@ -454,6 +454,7 @@
   </div>
 </div>
 
+<!-- 알림 팝업 (Alert) -->
 <div class="custom-alert-modal" id="customAlertModal">
   <div class="preview-content">
     <div style="font-size:15px; font-weight:bold; color:var(--burgundy); margin-bottom:12px;">KURAMAE CANNELÉ</div>
@@ -462,11 +463,23 @@
   </div>
 </div>
 
+<!-- 브랜드 커스텀 확인 팝업 (Confirm) -->
+<div class="custom-confirm-modal" id="customConfirmModal">
+  <div class="preview-content">
+    <div style="font-size:15px; font-weight:bold; color:var(--burgundy); margin-bottom:12px;">KURAMAE CANNELÉ</div>
+    <div style="font-size:13px; color:#333; margin-bottom:20px; line-height:1.5;" id="customConfirmText">【店舗スタッフ確認】<br>このチケットを使用済みにしますか？<br>（※一度使用済みにすると元に戻せません）</div>
+    <div class="preview-btn-group">
+      <button class="btn-edit" onclick="closeCustomConfirm(false)">キャンセル</button>
+      <button class="btn-confirm" onclick="closeCustomConfirm(true)">OK</button>
+    </div>
+  </div>
+</div>
+
 <script>
   let generatedShareUrl = '';
   let currentCardData = null;
+  let confirmResolver = null;
 
-  /* LZ-String 알고리즘으로 링크 길이 대폭 단축 */
   function encodeData(dataObj) {
     const jsonStr = JSON.stringify(dataObj);
     return LZString.compressToEncodedURIComponent(jsonStr);
@@ -474,11 +487,9 @@
 
   function decodeData(compressedStr) {
     try {
-      // 신규 LZ-String 해독
       const decompressed = LZString.decompressFromEncodedURIComponent(compressedStr);
       if (decompressed) return JSON.parse(decompressed);
       
-      // 구버전 btoa 방식과의 하위 호환성 유지
       let b64 = compressedStr.replace(/-/g, '+').replace(/_/g, '/');
       while (b64.length % 4) b64 += '=';
       const rawStr = decodeURIComponent(Array.prototype.map.call(atob(b64), function(c) {
@@ -497,6 +508,22 @@
 
   function closeCustomAlert() {
     document.getElementById('customAlertModal').classList.remove('show');
+  }
+
+  function showCustomConfirm(msg) {
+    document.getElementById('customConfirmText').innerHTML = msg.replace(/\n/g, '<br>');
+    document.getElementById('customConfirmModal').classList.add('show');
+    return new Promise((resolve) => {
+      confirmResolver = resolve;
+    });
+  }
+
+  function closeCustomConfirm(result) {
+    document.getElementById('customConfirmModal').classList.remove('show');
+    if (confirmResolver) {
+      confirmResolver(result);
+      confirmResolver = null;
+    }
   }
 
   window.addEventListener('DOMContentLoaded', () => {
@@ -559,7 +586,6 @@
     const pin = document.getElementById('pin').value;
     const gift = document.getElementById('giftOption').value;
 
-    // 초단축 배열 구조: [To, From, Msg, Pin, Gift]
     const payload = encodeData([toName, fromName, msg, pin, gift]);
     const baseUrl = window.location.origin + window.location.pathname;
     generatedShareUrl = `${baseUrl}?d=${payload}`;
@@ -654,8 +680,10 @@
     }
   }
 
-  function useTicketByStaff() {
-    if (confirm('【店舗スタッフ確認】\nこのチケットを使用済みにしますか？\n（※一度使用済みにすると元に戻せません）')) {
+  async function useTicketByStaff() {
+    const isConfirmed = await showCustomConfirm('【店舗スタッフ確認】\nこのチケットを使用済みにしますか？\n（※一度使用済みにすると元に戻せません）');
+    
+    if (isConfirmed) {
       const now = new Date();
       const timeStr = `${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
       
