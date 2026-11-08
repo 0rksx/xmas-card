@@ -21,7 +21,8 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg?v=11') repeat center center;
+      /* 크리스마스 트리 전체 배경 유지 */
+      background: url('tree_bg.jpg?v=13') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -37,11 +38,12 @@
       box-sizing: border-box;
     }
 
+    /* 프레임: 3:2 봉투 비율 기본 유지 */
     .envelope-container {
       position: relative;
       width: 100%;
       height: 0;
-      padding-bottom: 66.67%; /* 3:2 봉투 원본 비율 유지 */
+      padding-bottom: 66.67%; /* 3:2 원본 봉투 비율 */
       overflow: hidden;
       border-radius: 16px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.5);
@@ -49,30 +51,37 @@
       transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .envelope-container.open,
-    .envelope-container.sealed {
+    /* 편지 작성 폼이 열릴 때만 높이 확장 및 내부 붉은 종이 배경 적용 */
+    .envelope-container.open {
       height: 520px;
       padding-bottom: 0;
-      background: url('paper_red.jpg?v=11') repeat center center;
+      background: url('paper_red.jpg?v=13') repeat center center;
       background-size: cover;
     }
 
-    /* 첫 장 닫힌 봉투 - contain으로 모바일 안 잘리게 정렬 */
+    /* 봉인 완료 화면에서도 첫 화면처럼 3:2 봉투 비율 유지하여 빨간 여백 완전히 제거 */
+    .envelope-container.sealed {
+      height: 0;
+      padding-bottom: 66.67%;
+      background: transparent;
+    }
+
+    /* 첫 장 닫힌 봉투 */
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg?v=11') no-repeat center center;
-      background-size: contain !important;
+      background: url('envelope_close.jpg?v=13') no-repeat center center;
+      background-size: cover;
       z-index: 5;
       transition: opacity 0.5s ease;
     }
 
-    /* 봉인 완료 덮개 (IMG_8555.jpg 잘림 문제 완벽 보정) */
+    /* 봉인 완료 덮개 (첫 화면처럼 여백 없이 봉투만 꽉 차게 노출) */
     .bg-final {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg?v=11') no-repeat center center;
-      background-size: contain !important; /* 이미지 무조건 비율 맞춤 적용 */
+      background: url('envelope_final.jpg?v=13') no-repeat center center;
+      background-size: cover;
       z-index: 5;
       transform: translateY(-100%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -81,7 +90,7 @@
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg?v=11') repeat center center;
+      background: url('paper_ivory.jpg?v=13') repeat center center;
       background-size: cover;
       border-radius: 6px;
       padding: 20px 24px 12px 24px;
@@ -234,7 +243,7 @@
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(40, 5, 10, 0.35);
       z-index: 20; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-      color: #fff; text-align: center; padding: 40px 24px 30px 24px; box-sizing: border-box;
+      color: #fff; text-align: center; padding: 30px 24px 20px 24px; box-sizing: border-box;
       opacity: 0; pointer-events: none; transition: opacity 0.8s ease-in-out;
     }
     .result-overlay.show { opacity: 1; pointer-events: auto; }
@@ -308,8 +317,7 @@
       .container {
         padding: 4px;
       }
-      .envelope-container.open,
-      .envelope-container.sealed {
+      .envelope-container.open {
         height: 480px;
       }
       .letter {
@@ -414,7 +422,7 @@
         <h3 style="color:var(--burgundy); margin:4px 0 10px 0; font-family:Georgia, serif; font-style:italic;">To. <span id="recTo" class="name-text" style="font-family:sans-serif; font-style:normal;"></span></h3>
 
         <div id="lockSection" class="lock-box">
-          <p style="font-size:13px; color:#555; margin-bottom:12px;">12月24日開封用 暗証番号を入力してください</p>
+          <p style="font-size:13px; color:#555; margin-bottom:12px;">🔒 12月24日開封用 暗証番号を入力してください 。</p>
           <input type="password" id="recPin" class="input-pin" maxlength="4" placeholder="暗証番号4桁" style="width:65%; margin-bottom:10px;">
           <br>
           <button class="btn-submit" style="width:65%; padding:8px; border:1px solid #333;" onclick="unlockMessage()">開封する</button>
@@ -452,7 +460,7 @@
 <div class="custom-alert-modal" id="customAlertModal">
   <div class="preview-content">
     <div style="font-size:15px; font-weight:bold; color:var(--burgundy); margin-bottom:12px;">KURAMAE CANNELÉ</div>
-    <div style="font-size:13px; color:#333; margin-bottom:20px;" id="customAlertText">チケットを「使用済み」に処理しました。</div>
+    <div style="font-size:13px; color:#333; margin-bottom:20px;" id="customAlertText">LINE共有用リンクがコピーされました！<br>相手にURLと設定した暗証番号を一緒に送信してください。</div>
     <button class="btn-confirm" style="width:100%;" onclick="closeCustomAlert()">OK</button>
   </div>
 </div>
@@ -480,7 +488,7 @@
   }
 
   function showCustomAlert(msg) {
-    document.getElementById('customAlertText').innerText = msg;
+    document.getElementById('customAlertText').innerHTML = msg.replace(/\n/g, '<br>');
     document.getElementById('customAlertModal').classList.add('show');
   }
 
@@ -571,7 +579,7 @@
     if (!generatedShareUrl) generatedShareUrl = window.location.href;
     
     navigator.clipboard.writeText(generatedShareUrl).then(() => {
-      showCustomAlert('LINE共有用リンクがコピーされました！\n相手にURLを送信してください。');
+      showCustomAlert('LINE共有用リンクがコピーされました！\n相手にURLと設定した暗証番号を一緒に送信してください。');
     }).catch(() => {
       prompt('以下のURLをコピーして相手に送信してください:', generatedShareUrl);
     });
