@@ -24,7 +24,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg?v=16') repeat center center;
+      background: url('tree_bg.jpg?v=17') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -55,7 +55,7 @@
     .envelope-container.open {
       height: 520px;
       padding-bottom: 0;
-      background: url('paper_red.jpg?v=16') repeat center center;
+      background: url('paper_red.jpg?v=17') repeat center center;
       background-size: cover;
     }
 
@@ -68,7 +68,7 @@
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg?v=16') no-repeat center center;
+      background: url('envelope_close.jpg?v=17') no-repeat center center;
       background-size: cover;
       z-index: 5;
       transition: opacity 0.5s ease;
@@ -77,7 +77,7 @@
     .bg-final {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg?v=16') no-repeat center center;
+      background: url('envelope_final.jpg?v=17') no-repeat center center;
       background-size: cover;
       z-index: 5;
       transform: translateY(-100%);
@@ -87,7 +87,7 @@
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg?v=16') repeat center center;
+      background: url('paper_ivory.jpg?v=17') repeat center center;
       background-size: cover;
       border-radius: 6px;
       padding: 20px 24px 12px 24px;
@@ -378,8 +378,8 @@
             <div class="form-group">
               <select id="giftOption" class="select-gift">
                 <option value="free">無料（メッセージのみ贈る）</option>
-                <option value="cannele">カヌレ1個 ギフトチケット (500円)</option>
-                <option value="set">カヌレ＆紅茶セット チケット (1,000円)</option>
+                <option value="cannele">クラマエカヌレ1個 ギフトチケット (500円)</option>
+                <option value="set">クラマエカヌレ＆紅茶セット チケット (1,000円)</option>
               </select>
             </div>
           </div>
@@ -430,8 +430,9 @@
             <div style="background:rgba(255,255,255,0.85); padding:12px 14px; border-radius:4px; border:1px solid #e0d8cc; font-size:13px; color:#222; line-height:1.5; white-space:pre-wrap;" id="recMsg"></div>
             
             <div class="ticket-card" id="recGiftTitle" style="display:none;">
-              <div class="ticket-title" id="recGiftName">🎟️ カヌレ1個 交換チケット</div>
+              <div class="ticket-title" id="recGiftName">🎟️ クラマエカヌレ1個 交換チケット</div>
               <div class="ticket-sub">※店頭ご注文時に本画面をスタッフへご提示ください</div>
+              <div class="ticket-sub" style="color:var(--burgundy); margin-top:2px; font-weight:500;">※本チケットの有効期限は12月24日から1月31日までです。</div>
               
               <button class="btn-staff-use" id="staffUseBtn" onclick="useTicketByStaff()">[店舗スタッフ確認] 使用済みにする</button>
               <div class="used-badge" id="usedBadge">✓ 使用済み (<span id="usedTime"></span>)</div>
@@ -439,7 +440,7 @@
           </div>
 
           <div class="store-info" id="storeInfoBox" style="display:none;">
-            ※本チケットは「クラマエ カヌレ 本店（蔵前）」でのみご利用いただけます。<br>
+            ※本チケットは「KURAMAE CANNELÉ 蔵前本店」でのみご利用いただけます。<br>
             住所: 東京都台東区蔵前2-1-23 (蔵前駅 徒歩2分)<br>
             <a href="https://maps.google.com/?q=KURAMAE+CANNELE" target="_blank" class="maps-btn">📍 Google Mapsで場所を確認する</a>
           </div>
@@ -546,9 +547,10 @@
       return;
     }
 
+    // 1. 편지지 전환 대기 시간을 3초(3000ms)로 연장
     setTimeout(() => {
       document.getElementById('envelopeContainer').classList.add('open');
-    }, 1500);
+    }, 3000);
   });
 
   function updateCharCount(textarea) {
@@ -637,7 +639,8 @@
       document.getElementById('recFrom').innerText = data.f || '';
       
       const container = document.getElementById('envelopeContainer');
-      setTimeout(() => { container.classList.add('open'); }, 1200);
+      // 수신 화면 봉투 개봉 전환 대기 시간도 3초(3000ms)로 설정
+      setTimeout(() => { container.classList.add('open'); }, 3000);
 
       window.unlockMessage = function() {
         const inputPin = document.getElementById('recPin').value;
@@ -654,13 +657,14 @@
         const giftName = document.getElementById('recGiftName');
         const storeBox = document.getElementById('storeInfoBox');
 
+        // 2. 명칭 변경 반영 (クラマエカヌレ)
         if (data.g === 'cannele') {
           giftTitleBox.style.display = 'block';
-          giftName.innerText = '🎟️ カヌレ1個 交換チケット';
+          giftName.innerText = '🎟️ クラマエカヌレ1個 交換チケット';
           storeBox.style.display = 'block';
         } else if (data.g === 'set') {
           giftTitleBox.style.display = 'block';
-          giftName.innerText = '🎟️ カヌレ＆紅茶セット 交換チケット';
+          giftName.innerText = '🎟️ クラマエカヌレ＆紅茶セット 交換チケット';
           storeBox.style.display = 'block';
         } else {
           giftTitleBox.style.display = 'none';
