@@ -21,7 +21,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg?v=10') repeat center center;
+      background: url('tree_bg.jpg?v=11') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -41,12 +41,11 @@
       position: relative;
       width: 100%;
       height: 0;
-      padding-bottom: 66.67%; /* 3:2 봉투 비율 */
+      padding-bottom: 66.67%; /* 3:2 봉투 원본 비율 유지 */
       overflow: hidden;
       border-radius: 16px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.5);
-      background: url('paper_red.jpg?v=10') repeat center center;
-      background-size: cover;
+      background: transparent;
       transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -54,22 +53,26 @@
     .envelope-container.sealed {
       height: 520px;
       padding-bottom: 0;
+      background: url('paper_red.jpg?v=11') repeat center center;
+      background-size: cover;
     }
 
+    /* 첫 장 닫힌 봉투 - contain으로 모바일 안 잘리게 정렬 */
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg?v=10') no-repeat center center;
-      background-size: cover;
+      background: url('envelope_close.jpg?v=11') no-repeat center center;
+      background-size: contain !important;
       z-index: 5;
       transition: opacity 0.5s ease;
     }
 
+    /* 봉인 완료 덮개 (IMG_8555.jpg 잘림 문제 완벽 보정) */
     .bg-final {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg?v=10') no-repeat center center;
-      background-size: cover;
+      background: url('envelope_final.jpg?v=11') no-repeat center center;
+      background-size: contain !important; /* 이미지 무조건 비율 맞춤 적용 */
       z-index: 5;
       transform: translateY(-100%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -78,7 +81,7 @@
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg?v=10') repeat center center;
+      background: url('paper_ivory.jpg?v=11') repeat center center;
       background-size: cover;
       border-radius: 6px;
       padding: 20px 24px 12px 24px;
@@ -405,7 +408,7 @@
       <button class="btn-share" onclick="copyShareLink()">LINEで相手に贈る (リンクコピー)</button>
     </div>
 
-    <!-- 4. 수신 화면 (To, From 항상 정상 표기 보장) -->
+    <!-- 4. 수신 화면 -->
     <div class="letter" id="receiverLetter" style="display:none;">
       <div class="receive-view">
         <h3 style="color:var(--burgundy); margin:4px 0 10px 0; font-family:Georgia, serif; font-style:italic;">To. <span id="recTo" class="name-text" style="font-family:sans-serif; font-style:normal;"></span></h3>
@@ -446,7 +449,6 @@
   </div>
 </div>
 
-<!-- 4번 요청: KURAMAE CANNELÉ 브랜드 전용 알림창 모달 -->
 <div class="custom-alert-modal" id="customAlertModal">
   <div class="preview-content">
     <div style="font-size:15px; font-weight:bold; color:var(--burgundy); margin-bottom:12px;">KURAMAE CANNELÉ</div>
@@ -583,7 +585,6 @@
       const recLetter = document.getElementById('receiverLetter');
       recLetter.style.display = 'block';
 
-      // To, From 이름 무조건 렌더링
       document.getElementById('recTo').innerText = data.t || '';
       document.getElementById('recFrom').innerText = data.f || '';
       
@@ -643,7 +644,6 @@
       badge.style.display = 'inline-block';
       document.getElementById('usedTime').innerText = timeStr;
       
-      // 4번 요청: 도메인 대신 KURAMAE CANNELÉ 브랜딩 커스텀 팝업
       showCustomAlert('チケットを「使用済み」に処理しました。');
     }
   }
