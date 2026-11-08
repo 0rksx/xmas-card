@@ -15,7 +15,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg?v=8') repeat center center;
+      background: url('tree_bg.jpg?v=9') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -37,10 +37,10 @@
       width: 100%;
       height: 0;
       padding-bottom: 66.67%; /* 3:2 원본 봉투 비율로 꽉 채움 */
-      overflow: hidden;
+      overflow: hidden; /* 대기 중인 편지 완전 차단 */
       border-radius: 16px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.5);
-      background: url('paper_red.jpg?v=8') repeat center center;
+      background: url('paper_red.jpg?v=9') repeat center center;
       background-size: cover;
       transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -56,7 +56,7 @@
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg?v=8') no-repeat center center;
+      background: url('envelope_close.jpg?v=9') no-repeat center center;
       background-size: cover;
       z-index: 5;
       transition: opacity 0.5s ease;
@@ -66,25 +66,27 @@
     .bg-final {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg?v=8') no-repeat center center;
+      background: url('envelope_final.jpg?v=9') no-repeat center center;
       background-size: cover;
       z-index: 5;
       transform: translateY(-100%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* 편지 카드 */
+    /* 편지 카드 - 대기 상태 시 완전 숨김 처리 */
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg?v=8') repeat center center;
+      background: url('paper_ivory.jpg?v=9') repeat center center;
       background-size: cover;
       border-radius: 6px;
       padding: 20px 24px 12px 24px;
       box-sizing: border-box;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      transform: translateY(105%);
-      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(120%);
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease, visibility 0.5s ease;
       z-index: 10;
       display: flex;
       flex-direction: column;
@@ -97,13 +99,18 @@
       display: none;
     }
 
+    /* 편지 열릴 때 등장 */
     .envelope-container.open .letter { 
-      transform: translateY(0); 
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
     }
     
     .envelope-container.sealed .letter { 
-      transform: translateY(105%) !important; 
-      transition: transform 1s ease-in-out !important; 
+      transform: translateY(120%) !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transition: transform 1s ease-in-out, opacity 0.5s ease !important; 
     }
     
     .envelope-container.sealed .bg-final { 
