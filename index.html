@@ -15,7 +15,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg?v=5') repeat center center;
+      background: url('tree_bg.jpg?v=6') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -38,15 +38,15 @@
       overflow: hidden;
       border-radius: 20px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.5);
-      background: url('paper_red.jpg?v=5') repeat center center;
+      background: url('paper_red.jpg?v=6') repeat center center;
       background-size: cover;
     }
 
-    /* 닫힌 봉투 레이어 (이상한 삼각형 덮개 제거) */
+    /* 첫 장 봉투 메인 레이어 */
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_close.jpg?v=5') no-repeat center center;
+      background: url('envelope_close.jpg?v=6') no-repeat center center;
       background-size: cover;
       z-index: 5;
       transition: opacity 0.5s ease;
@@ -56,28 +56,20 @@
     .bg-final {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_final.jpg?v=5') no-repeat center center;
+      background: url('envelope_final.jpg?v=6') no-repeat center center;
       background-size: cover;
       z-index: 5;
       transform: translateY(-100%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .bg-opened {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: url('envelope_open.png?v=5') no-repeat center center;
-      background-size: cover;
-      z-index: 1;
-    }
-
-    /* 편지 카드 (잔상 없이 순백의 상아색 폼 제공) */
+    /* 편지 카드 (순수한 빨간 배경 위에 상아색 편지만 깔끔하게 배치) */
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg?v=5') repeat center center;
+      background: url('paper_ivory.jpg?v=6') repeat center center;
       background-size: cover;
-      border-radius: 4px;
+      border-radius: 6px;
       padding: 20px 24px 12px 24px;
       box-sizing: border-box;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
@@ -90,7 +82,7 @@
       overflow-y: auto;
     }
 
-    /* 열렸을 때 닫힌 봉투 완벽 제거 */
+    /* 편지 열렸을 때 첫 장 봉투 완전히 소멸 */
     .envelope-container.open .bg-closed {
       opacity: 0;
       display: none;
@@ -335,7 +327,6 @@
     
     <div class="bg-closed"></div>
     <div class="bg-final"></div>
-    <div class="bg-opened"></div>
 
     <!-- 1. 작성용 편지 -->
     <div class="letter" id="senderLetter">
