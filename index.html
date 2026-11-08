@@ -15,7 +15,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif;
-      background: url('tree_bg.jpg?v=7') repeat center center;
+      background: url('tree_bg.jpg?v=8') repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -31,34 +31,43 @@
       box-sizing: border-box;
     }
 
-    /* 메인 봉투 전체 프레임 */
+    /* 프레임: 초기에는 봉투 크기에 딱 맞추고 편지가 열릴 때 확장 */
     .envelope-container {
       position: relative;
       width: 100%;
-      height: 520px;
+      height: 0;
+      padding-bottom: 66.67%; /* 3:2 원본 봉투 비율로 꽉 채움 */
       overflow: hidden;
-      border-radius: 20px;
+      border-radius: 16px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.5);
-      background: url('paper_red.jpg?v=7') repeat center center;
+      background: url('paper_red.jpg?v=8') repeat center center;
       background-size: cover;
+      transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* 첫 장 봉투 - 잘림 완전 방지 (contain 적용) */
+    /* 편지가 열렸을 때 빨간 종이 배경 전체 확장 */
+    .envelope-container.open,
+    .envelope-container.sealed {
+      height: 520px;
+      padding-bottom: 0;
+    }
+
+    /* 첫 장 봉투 - 여백 없이 이미지 100% 꽉 채움 */
     .bg-closed {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: #4a060e url('envelope_close.jpg?v=7') no-repeat center center;
-      background-size: contain !important; /* 모바일 잘림 완벽 방지 */
+      background: url('envelope_close.jpg?v=8') no-repeat center center;
+      background-size: cover;
       z-index: 5;
       transition: opacity 0.5s ease;
     }
 
-    /* 봉인 완료 후 덮개 */
+    /* 봉인 완료 덮개 */
     .bg-final {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: #4a060e url('envelope_final.jpg?v=7') no-repeat center center;
-      background-size: contain !important;
+      background: url('envelope_final.jpg?v=8') no-repeat center center;
+      background-size: cover;
       z-index: 5;
       transform: translateY(-100%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -68,7 +77,7 @@
     .letter {
       position: absolute;
       top: 20px; left: 3%; width: 94%; height: 480px;
-      background: url('paper_ivory.jpg?v=7') repeat center center;
+      background: url('paper_ivory.jpg?v=8') repeat center center;
       background-size: cover;
       border-radius: 6px;
       padding: 20px 24px 12px 24px;
@@ -285,14 +294,13 @@
       border-radius: 4px;
     }
 
-    /* 📱 모바일 전용 반응형 높이 보정 */
     @media (max-width: 768px) {
       .container {
         padding: 4px;
       }
-      .envelope-container {
-        height: 480px; /* 모바일 세로 비율에 맞게 최적화 */
-        border-radius: 14px;
+      .envelope-container.open,
+      .envelope-container.sealed {
+        height: 480px;
       }
       .letter {
         top: 10px;
@@ -355,7 +363,7 @@
             <div class="form-group">
               <select id="giftOption" class="select-gift">
                 <option value="free">無料（メッセージのみ贈る）</option>
-                <option value="cannele">カヌレ1個 ギフトカード (500円)</option>
+                <option value="cannele">カヌレ1個 ギフトチケット (500円)</option>
                 <option value="set">カヌレ＆紅茶セット チケット (1,000円)</option>
               </select>
             </div>
@@ -550,9 +558,6 @@
       const recLetter = document.getElementById('receiverLetter');
       recLetter.style.display = 'block';
 
-      document.getElementById('recTo').innerText = data.t || 'お客様';
-      document.getElementById('recFrom').innerText = data.f || '匿名';
-      
       const container = document.getElementById('envelopeContainer');
       setTimeout(() => { container.classList.add('open'); }, 1200);
 
